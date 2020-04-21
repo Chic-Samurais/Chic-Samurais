@@ -2,6 +2,13 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Artwork = db.define('artwork', {
+  artist: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
+  },
   title: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -15,14 +22,15 @@ const Artwork = db.define('artwork', {
   },
   imageUrl: {
     type: Sequelize.TEXT,
-    defaultValue: 'https://cdn2.iconfinder.com/data/icons/creative-11/64/painting-art-canvas-picture-512.png',
+    defaultValue:
+      'https://cdn2.iconfinder.com/data/icons/creative-11/64/painting-art-canvas-picture-512.png',
     validate: {
       isUrl: true
     }
   },
   dimensions: {
     type: Sequelize.STRING,
-    defaultValue: "24 x 36 inches"
+    defaultValue: '24 x 36 inches'
   },
   price: {
     type: Sequelize.FLOAT(10, 2),

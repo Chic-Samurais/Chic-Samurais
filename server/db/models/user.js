@@ -16,9 +16,37 @@ const User = db.define('user', {
       return () => this.getDataValue('password')
     }
   },
-  previousPurchases: {
-    type: Sequelize.ARRAY
+  streetAddress: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      isEmpty: false
+    }
   },
+  city: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      isEmpty: false
+    }
+  },
+  state: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      isEmpty: false
+    }
+  },
+  zip: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    validate: {
+      isEmpty: false
+    }
+  },
+  // previousPurchases: {
+  //   type: Sequelize.ARRAY
+  // },
   salt: {
     type: Sequelize.STRING,
     // Making `.salt` act like a function hides it when serializing to JSON.

@@ -1,10 +1,13 @@
 const User = require('./user')
-const Artist = require('./artist')
 const Artwork = require('./artwork')
-const Tag = require('./tag')
+const ArtworkOrder = require('./artworkOrder')
+const Order = require('./order')
 
-Artwork.belongsTo(Artist)
-Artist.hasMany(Artwork)
+Artwork.belongsToMany(Order, {through: ArtworkOrder})
+Order.belongsToMany(Artwork, {through: ArtworkOrder})
+
+Order.belongsTo(User)
+User.hasMany(Order)
 /**
  * If we had any associations to make, this would be a great place to put them!
  * ex. if we had another model called BlogPost, we might say:
@@ -19,5 +22,8 @@ Artist.hasMany(Artwork)
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User
+  User,
+  Artwork,
+  ArtworkOrder,
+  Order
 }
