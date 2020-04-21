@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const ArtworkOrder = db.define('artworkOrder', {
+const PosterOrder = db.define('posterOrder', {
   cost: {
     type: Sequelize.FLOAT(10, 2),
     allowNull: false,
@@ -17,6 +17,6 @@ const ArtworkOrder = db.define('artworkOrder', {
   }
 })
 
-// ArtworkOrder.total = function()
+// PosterOrder.total = function()
 
-module.exports = ArtworkOrder
+module.exports = PosterOrder

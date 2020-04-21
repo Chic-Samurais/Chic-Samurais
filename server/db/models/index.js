@@ -1,10 +1,10 @@
-const User = require('./user')
-const Artwork = require('./artwork')
-const ArtworkOrder = require('./artworkOrder')
-const Order = require('./order')
+const User = require('./User')
+const Poster = require('./Poster')
+const PosterOrder = require('./PosterOrder')
+const Order = require('./Order')
 
-Artwork.belongsToMany(Order, {through: ArtworkOrder})
-Order.belongsToMany(Artwork, {through: ArtworkOrder})
+Poster.belongsToMany(Order, {through: PosterOrder})
+Order.belongsToMany(Poster, {through: PosterOrder})
 
 Order.belongsTo(User)
 User.hasMany(Order)
@@ -23,7 +23,7 @@ User.hasMany(Order)
  */
 module.exports = {
   User,
-  Artwork,
-  ArtworkOrder,
+  Poster,
+  PosterOrder,
   Order
 }
