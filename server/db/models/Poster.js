@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Artwork = db.define('artwork', {
+const Poster = db.define('poster', {
   artist: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -52,4 +52,4 @@ const Artwork = db.define('artwork', {
   }
 })
 
-module.exports = Artwork
+module.exports = Poster
