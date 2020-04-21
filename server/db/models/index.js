@@ -1,5 +1,10 @@
 const User = require('./user')
+const Artist = require('./artist')
+const Artwork = require('./artwork')
+const Tag = require('./tag')
 
+Artwork.belongsTo(Artist)
+Artist.hasMany(Artwork)
 /**
  * If we had any associations to make, this would be a great place to put them!
  * ex. if we had another model called BlogPost, we might say:
