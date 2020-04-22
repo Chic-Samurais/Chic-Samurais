@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Poster = db.define('poster', {
+  // update to Product/'product'
   artist: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -17,6 +18,7 @@ const Poster = db.define('poster', {
     }
   },
   year: {
+    // look into custom validation for years
     type: Sequelize.INTEGER,
     allowNull: true
   },
@@ -33,6 +35,7 @@ const Poster = db.define('poster', {
     defaultValue: '24 x 36 inches'
   },
   price: {
+    // update type to integer // look into getters 'get()'/setters or instance methods for converting to dollars and cents
     type: Sequelize.FLOAT(10, 2),
     allowNull: false,
     validate: {
@@ -41,7 +44,7 @@ const Poster = db.define('poster', {
   },
   quantity: {
     type: Sequelize.INTEGER,
-    defaultValue: 100,
+    defaultValue: 100, // revisit
     validate: {
       min: 0
     }
