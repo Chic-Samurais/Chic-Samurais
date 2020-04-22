@@ -5,11 +5,10 @@ const db = require('../db')
 // calculate price per product by multiplying quantity and price here
 // calculate total order price by summing the result from line 5
 
-const PosterOrder = db.define('posterOrder', {
+const OrderProduct = db.define('orderProduct', {
   // update variable and table name
-  cost: {
-    // update to price// also integer
-    type: Sequelize.FLOAT(10, 2),
+  price: {
+    type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
       min: 0
@@ -18,11 +17,15 @@ const PosterOrder = db.define('posterOrder', {
   quantity: {
     type: Sequelize.INTEGER,
     validate: {
-      min: 1
+      min: 0
+    }
+  },
+  subtotal: {
+    type: Sequelize.VIRTUAL,
+    get() {
+      return this.getDataValue('price') * this.getDataValue('quantity')
     }
   }
 })
 
-// PosterOrder.total = function()
-
-module.exports = PosterOrder
+module.exports = OrderProduct
