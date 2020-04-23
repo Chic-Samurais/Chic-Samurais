@@ -52,6 +52,8 @@ router.get('/:orderId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    // const obj = req.sessions.cart
+    console.log('post route req.session', req.session)
     const newOrder = await Order.create(req.body) //destructure off of here??
 
     // newOrder.total = newOrder.products

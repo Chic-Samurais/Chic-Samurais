@@ -63,6 +63,15 @@ const createApp = () => {
   app.use(passport.initialize())
   app.use(passport.session())
 
+  app.use((req, res, next) => {
+    if (!req.session.cart)
+      req.session.cart = {
+        products: [],
+        total: 0
+      }
+    // console.log('all routes cart', req.session.cart) // increment THEN log
+    next() // needed to continue through express middleware
+  })
   // auth and api routes
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))

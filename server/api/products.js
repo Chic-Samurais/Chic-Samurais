@@ -6,6 +6,7 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log('our req.session', req.session)
     const products = await Product.findAll()
     res.json(products)
   } catch (err) {
