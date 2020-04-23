@@ -22,7 +22,7 @@ async function seed() {
       // lastName: 'Smith',
       email: 'email1@email1.com',
       password: '1234567'
-      // address: '456 Main Street'
+      // address: '234 Main Street'
     })
   ])
 
