@@ -7,13 +7,13 @@ const db = require('../db')
 
 const OrderProduct = db.define('orderProduct', {
   // update variable and table name
-  price: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    validate: {
-      min: 0
-    }
-  },
+  // price: {
+  //   type: Sequelize.INTEGER,
+  //   allowNull: false,
+  //   validate: {
+  //     min: 0,
+  //   },
+  // },
   quantity: {
     type: Sequelize.INTEGER,
     validate: {
