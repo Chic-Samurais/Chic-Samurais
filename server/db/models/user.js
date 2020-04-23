@@ -3,10 +3,10 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
-  isAdmin: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
-  },
+  // isAdmin: {
+  //   type: Sequelize.BOOLEAN,
+  //   defaultValue: false
+  // },
   email: {
     type: Sequelize.STRING,
     unique: true,
@@ -15,28 +15,28 @@ const User = db.define('user', {
       isEmail: true
     }
   },
-  firstName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      isEmpty: false
-    }
-  },
-  lastName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      isEmpty: false
-    }
-  },
-  fullName: {
-    type: Sequelize.VIRTUAL,
-    get() {
-      return (
-        this.getDataValue('firstName') + ' ' + this.getDataValue('lastName')
-      )
-    }
-  },
+  // firstName: {
+  //   type: Sequelize.STRING,
+  //   allowNull: false,
+  //   validate: {
+  //     isEmpty: false
+  //   }
+  // },
+  // lastName: {
+  //   type: Sequelize.STRING,
+  //   allowNull: false,
+  //   validate: {
+  //     isEmpty: false
+  //   }
+  // },
+  // fullName: {
+  //   type: Sequelize.VIRTUAL,
+  //   get() {
+  //     return (
+  //       this.getDataValue('firstName') + ' ' + this.getDataValue('lastName')
+  //     )
+  //   }
+  // },
   password: {
     type: Sequelize.STRING,
     // Making `.password` act like a func hides it when serializing to JSON.
@@ -45,13 +45,13 @@ const User = db.define('user', {
       return () => this.getDataValue('password')
     }
   },
-  address: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      isEmpty: false
-    }
-  },
+  // address: {
+  //   type: Sequelize.STRING,
+  //   allowNull: false,
+  //   validate: {
+  //     isEmpty: false
+  //   }
+  // },
   salt: {
     type: Sequelize.STRING,
     // Making `.salt` act like a function hides it when serializing to JSON.
