@@ -10,6 +10,28 @@ const Order = db.define('order', {
     type: Sequelize.INTEGER
     //allowNull: false?
   }
+  // firstName: {
+  //   type: Sequelize.STRING,
+  //   allowNull: false,
+  //   validate: {
+  //     isEmpty: false,
+  //   },
+  // },
+  // lastName: {
+  //   type: Sequelize.STRING,
+  //   allowNull: false,
+  //   validate: {
+  //     isEmpty: false,
+  //   },
+  // },
+  // fullName: {
+  //   type: Sequelize.VIRTUAL
+  //   get() {
+  //     return (
+  //       this.getDataValue('firstName') + ' ' + this.getDataValue('lastName')
+  //     )
+  //   },
+  // },
 })
 
 module.exports = Order
