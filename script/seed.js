@@ -1,18 +1,184 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Order, Product, OrderProduct} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({
+      // isAdmin: true,
+      // firstName: 'Jane',
+      // lastName: 'Doe',
+      email: 'email@email.com',
+      password: '1234567'
+      // address: '123 Main Street'
+    }),
+    User.create({
+      // isAdmin: true,
+      // firstName: 'John',
+      // lastName: 'Smith',
+      email: 'email1@email1.com',
+      password: '1234567'
+      // address: '234 Main Street'
+    })
   ])
 
-  console.log(`seeded ${users.length} users`)
+  const products = await Promise.all([
+    Product.create({
+      artist: 'Vincent van Gogh',
+      title: 'The Starry Night',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1200px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'
+    }),
+    Product.create({
+      artist: 'Vincent van Gogh',
+      title: 'The Night Cafe',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://www.wikidata.org/wiki/Q674846#/media/File:Vincent_Willem_van_Gogh_076.jpg'
+    }),
+    Product.create({
+      artist: 'Vincent van Gogh',
+      title: 'Irises',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl: 'https://media.getty.edu/museum/images/web/enlarge/00094701.jpg'
+    }),
+    Product.create({
+      artist: 'Vincent van Gogh',
+      title: 'Bedroom in Arles',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl: 'https://www.vangoghgallery.com/painting/img/bedroom_full.jpeg'
+    }),
+    Product.create({
+      artist: 'Carrie Mae Weems',
+      title: 'Kitchen Table Series (Mother & Daughter)',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://i0.wp.com/www.guggenheim.org/wp-content/uploads/2014/01/CMW_MotherDaughter_1024.jpg?w=870&zoom=2'
+    }),
+    Product.create({
+      artist: 'Helen Frankenthaler',
+      title: 'Interior Landscape',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://uploads4.wikiart.org/images/helen-frankenthaler/interior-landscape-1964.jpg'
+    }),
+    Product.create({
+      artist: 'Helen Frankenthaler',
+      title: 'Saturn Revisited',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://uploads2.wikiart.org/images/helen-frankenthaler/saturn-revisited-1964.jpg'
+    }),
+    Product.create({
+      artist: 'Helen Frankenthaler',
+      title: 'What Red Lines Can Do',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://uploads7.wikiart.org/images/helen-frankenthaler/what-red-lines-can-do-1970.jpg'
+    }),
+    Product.create({
+      artist: 'Helen Frankenthaler',
+      title: 'Dream Walk',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://uploads5.wikiart.org/images/helen-frankenthaler/dream-walk-1977.jpg'
+    }),
+    Product.create({
+      artist: 'Mickalene Thomas',
+      title: 'Din, une très belles négresse #2',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://d1lfxha3ugu3d4.cloudfront.net/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_Sig-Image_EL110_428W.jpg'
+    }),
+    Product.create({
+      artist: 'Mickalene Thomas',
+      title: 'Interior: Two Chairs and a Fireplace',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.060_Interior-Two-Chairs-and-Fireplace_428H.jpg'
+    }),
+    Product.create({
+      artist: 'Mickalene Thomas',
+      title: 'Qusuquzah, une très belles négresse #2',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.066_Qusuquzah-Une-Tres-Belle-Negresse-2_428H.jpg'
+    }),
+    Product.create({
+      artist: 'Mickalene Thomas',
+      title: 'Interior: Green and White Couch',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.059_Interior.-Green-and-White-Couch_428H.jpg'
+    }),
+    Product.create({
+      artist: 'Mickalene Thomas',
+      title: 'Landscape with Tree',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
+      price: 7500,
+      imageUrl:
+        'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.063_Landscape-With-Tree_428H.jpg'
+    })
+  ])
+
+  const orders = await Promise.all([
+    Order.create({
+      userId: 1
+    }),
+    Order.create({
+      userId: 2
+    })
+  ])
+
+  const orderProducts = await Promise.all([
+    OrderProduct.create({
+      orderId: 1,
+      productId: 3,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 2,
+      productId: 5,
+      price: 6500
+    })
+  ])
+
+  // console.log(`seeded ${users.length} users`)
+  console.log(`seeded ${products.length} products`)
+  // console.log(`seeded ${orders.length} orders`)
+  // console.log(`seeded ${orderProducts.length} orderProducts`)
   console.log(`seeded successfully`)
 }
 
