@@ -8,36 +8,8 @@ const Order = db.define('order', {
   },
   total: {
     type: Sequelize.INTEGER
+    //allowNull: false?
   }
-  // firstName: {
-  //   type: Sequelize.STRING,
-  //   allowNull: false,
-  //   validate: {
-  //     isEmpty: false
-  //   }
-  // },
-  // lastName: {
-  //   type: Sequelize.STRING,
-  //   allowNull: false,
-  //   validate: {
-  //     isEmpty: false
-  //   }
-  // },
-  // fullName: {
-  //   type: Sequelize.VIRTUAL,
-  //   get() {
-  //     return (
-  //       this.getDataValue('firstName') + ' ' + this.getDataValue('lastName')
-  //     )
-  //   }
-  // },
-  // address: {
-  //   type: Sequelize.STRING,
-  //   allowNull: false,
-  //   validate: {
-  //     isEmpty: false
-  //   }
-  // }
 })
 
 module.exports = Order
