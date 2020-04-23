@@ -7,7 +7,7 @@ router.get('/', async (req, res, next) => {
       // explicitly select only the id and email fields - even though
       // users' passwords are encrypted, it won't help if we just
       // send everything to anyone who asks!
-      attributes: ['id', 'email', 'isAdmin']
+      attributes: ['id', 'email']
       //For code review: do we want to exclude passwords to admins too if we're planning on protecting this route?
     })
     res.json(users)
