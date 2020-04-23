@@ -12,7 +12,7 @@ const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
 const CREATE_PRODUCT = 'CREATE_PRODUCT'
 
 /**
- * ACTION CREATORS
+ * ACTION TYPES
  */
 const getProducts = retrievedProducts => ({
   type: GET_PRODUCTS,
@@ -27,7 +27,7 @@ const removeProduct = id => ({type: REMOVE_PRODUCT, id})
  * INITIAL STATE
  */
 const initialProductState = {
-  products: [],
+  allProducts: [],
   singleProduct: {}
 }
 
@@ -56,7 +56,7 @@ export default function productReducer(state = initialProductState, action) {
     case GET_PRODUCTS:
       return {
         ...state,
-        products: action.retrievedProducts
+        allProducts: action.retrievedProducts
       }
     case GET_SINGLE_PRODUCT:
       return {

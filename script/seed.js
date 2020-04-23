@@ -43,7 +43,7 @@ async function seed() {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
       imageUrl:
-        'https://www.wikidata.org/wiki/Q674846#/media/File:Vincent_Willem_van_Gogh_076.jpg'
+        'https://www.vincentvangogh.org/images/paintings/the-night-cafe.jpg'
     }),
     Product.create({
       artist: 'Vincent van Gogh',
