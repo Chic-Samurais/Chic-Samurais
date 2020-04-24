@@ -44,6 +44,7 @@ export const fetchProducts = () => async dispatch => {
 }
 export const fetchSingleProduct = productId => async dispatch => {
   try {
+    console.log('------fetching single product-----')
     const {data} = await axios.get(`/api/products/${productId}`)
     dispatch(getSingleProduct(data))
   } catch (err) {
@@ -59,6 +60,7 @@ export default function productReducer(state = initialProductState, action) {
         allProducts: action.retrievedProducts
       }
     case GET_SINGLE_PRODUCT:
+      console.log('I THUNK THIS WOULD WORK')
       return {
         ...state,
         singleProduct: action.id
