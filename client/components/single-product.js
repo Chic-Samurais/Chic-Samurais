@@ -11,14 +11,10 @@ export class SingleProduct extends React.Component {
     //   // this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    console.log(this.props, 'component did mount')
     const id = this.props.match.params.productId
     console.log('our product id', id)
-    try {
-      this.props.fetchSingleProduct(id)
-    } catch (error) {
-      console.error(error)
-    }
+    this.props.fetchSingleProduct(id)
+    console.log(this.props, 'component did mount')
   }
   render() {
     console.log('SINGLE PRODUCT RENDER')
@@ -32,7 +28,7 @@ export class SingleProduct extends React.Component {
         <p>{product.artist}</p>
         <img src={product.imageUrl} />
         <p>
-          {product.price} <button type="submit">Add to Cart</button>
+          ${product.price / 100} <button type="submit">Add to Cart</button>
         </p>
         <p>{product.desciption}</p>
       </div>
@@ -41,7 +37,7 @@ export class SingleProduct extends React.Component {
 }
 
 const mapState = state => {
-  return {singleProduct: state.singleProduct}
+  return {product: state.product}
 }
 const mapDispatch = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProduct(id))
