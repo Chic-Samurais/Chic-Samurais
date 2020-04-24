@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchProducts, fetchSingleProduct} from '../store/product'
+import {fetchProducts} from '../store/product'
 import {Link} from 'react-router-dom'
 
 export class AllProducts extends React.Component {
@@ -26,10 +26,12 @@ export class AllProducts extends React.Component {
                 height="250px"
                 width=""
               />
-              <h3>
-                {product.title} {product.artist}
-              </h3>
-              <p>{product.price}</p>
+              <h3>{product.title}</h3>
+              <h4>{product.artist}</h4>
+              <p>
+                ${product.price / 100}{' '}
+                <button type="submit">Add to Cart</button>{' '}
+              </p>
             </Link>
           </div>
         ))}

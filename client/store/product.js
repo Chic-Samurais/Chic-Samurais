@@ -59,10 +59,7 @@ export default function productReducer(state = initialProductState, action) {
         allProducts: action.retrievedProducts
       }
     case GET_SINGLE_PRODUCT:
-      return {
-        ...state,
-        singleProduct: action.id
-      }
+      return action.id
     default:
       return state
   }
