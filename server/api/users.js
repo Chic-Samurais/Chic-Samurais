@@ -1,6 +1,27 @@
 const router = require('express').Router()
-const {User, Order} = require('../db/models')
+const {User, Order, Product} = require('../db/models')
 module.exports = router
+
+//LOGGED IN USER CARTS
+router.get('/cart', async (req, res, next) => {
+  try {
+    const [userCart, created] = await Order.findOrCreate({
+      where: {userId: req.session.passport.user, isComplete: false},
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+    console.log('this cart was created:', created)
+    console.log(req.session.passport.user)
+    res.json(userCart)
+  } catch (err) {
+    next(err)
+  }
+})
+
+//USER INFORMATION
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
@@ -60,6 +81,41 @@ router.delete('/:userId', async (req, res, next) => {
     const user = await User.findByPk(req.params.userId)
     await user.destroy()
     res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/:userId/cart', async (req, res, next) => {
+  try {
+    const [userCart, created] = await Order.findOrCreate({
+      where: {userId: req.params.userId, isComplete: false},
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+    console.log('this cart was created:', created)
+    console.log(req.session.passport.user)
+    res.json(userCart)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/:userId/cart/:productId', async (req, res, next) => {
+  try {
+    const [userCart, created] = await Order.findOrCreate({
+      where: {userId: req.params.userId, isComplete: false},
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+    console.log('this cart was created:', created)
+    res.json(userCart)
   } catch (err) {
     next(err)
   }
