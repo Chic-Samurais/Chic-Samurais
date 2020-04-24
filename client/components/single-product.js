@@ -7,13 +7,18 @@ export class SingleProduct extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-    // this.handleChange = this.handleChange.bind(this)
-    // this.handleSubmit = this.handleSubmit.bind(this)
+    //   // this.handleChange = this.handleChange.bind(this)
+    //   // this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    console.log(this.props, 'compenantdid mount')
+    console.log(this.props, 'component did mount')
     const id = this.props.match.params.productId
-    this.props.fetchSingleProduct(id)
+    console.log('our product id', id)
+    try {
+      this.props.fetchSingleProduct(id)
+    } catch (error) {
+      console.error(error)
+    }
   }
   render() {
     console.log('SINGLE PRODUCT RENDER')
@@ -36,7 +41,7 @@ export class SingleProduct extends React.Component {
 }
 
 const mapState = state => {
-  return {...state, singleProduct: state.product.singleProduct}
+  return {singleProduct: state.singleProduct}
 }
 const mapDispatch = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProduct(id))

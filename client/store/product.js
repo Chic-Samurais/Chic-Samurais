@@ -61,10 +61,7 @@ export default function productReducer(state = initialProductState, action) {
       }
     case GET_SINGLE_PRODUCT:
       console.log('I THUNK THIS WOULD WORK')
-      return {
-        ...state,
-        singleProduct: action.id
-      }
+      return action.id
     default:
       return state
   }
