@@ -11,16 +11,9 @@ export class SingleProduct extends React.Component {
     //   // this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    const id = this.props.match.params.productId
-    console.log('our product id', id)
-    this.props.fetchSingleProduct(id)
-    console.log(this.props, 'component did mount')
+    this.props.fetchSingleProduct(this.props.match.params.productId)
   }
   render() {
-    console.log('SINGLE PRODUCT RENDER')
-    console.log('--------------')
-    console.log('PROPS', this.props)
-    console.log('STATE', this.state)
     const product = this.props.product || {}
     return (
       <div id="singleProduct">

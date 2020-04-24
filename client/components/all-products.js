@@ -15,7 +15,6 @@ export class AllProducts extends React.Component {
   }
   render() {
     const products = this.props.products || []
-    console.log('PROPS', this.props)
     return (
       <div id="allProducts">
         {products.map(product => (
