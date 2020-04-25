@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Order, Product} = require('../db/models')
+const {User, Order, Product, ProductOrder} = require('../db/models')
 module.exports = router
 
 //LOGGED IN USER CARTS
@@ -13,8 +13,52 @@ router.get('/cart', async (req, res, next) => {
         }
       ]
     })
-    console.log('this cart was created:', created)
-    console.log(req.session.passport.user)
+    console.log('this cart was created:', created) // remember to remove!!
+    console.log(req.session.passport.user) //remember to remove!!
+    res.json(userCart)
+  } catch (err) {
+    next(err)
+  }
+})
+
+//DO WE NEED THIS??
+router.get('/cart/:productId', async (req, res, next) => {
+  try {
+    const [userCart, created] = await Order.findOrCreate({
+      where: {userId: req.session.passport.user, isComplete: false},
+      include: [
+        {
+          model: Product,
+          where: {id: req.params.productId}
+        }
+      ]
+    })
+    console.log('this cart was created:', created) // remember to remove!!
+    console.log(req.session.passport.user) //remember to remove!!
+    res.json(userCart)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/cart', async (req, res, next) => {
+  try {
+    const [userCart, created] = await Order.findOrCreate({
+      where: {userId: req.session.passport.user, isComplete: false},
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+
+    if (
+      !userCart.products.filter(product => product.id === req.body.id).length
+    ) {
+      userCart.addProduct(req.body)
+    }
+    console.log('this cart was created:', created) // remember to remove!!
+    console.log(req.session.passport.user) //remember to remove!!
     res.json(userCart)
   } catch (err) {
     next(err)
