@@ -3,7 +3,7 @@ const {User, Order, Product, OrderProduct} = require('../db/models')
 module.exports = router
 
 //LOGGED IN USER CARTS
-router.get('/cart', async (req, res, next) => {
+router.get('/:userId/cart', async (req, res, next) => {
   try {
     const [userCart, created] = await Order.findOrCreate({
       where: {userId: req.session.passport.user, isComplete: false},
