@@ -41,7 +41,7 @@ router.get('/cart/:productId', async (req, res, next) => {
   }
 })
 
-router.post('/cart', async (req, res, next) => {
+router.post('/cart/:productId', async (req, res, next) => {
   try {
     const [userCart, created] = await Order.findOrCreate({
       where: {userId: req.session.passport.user, isComplete: false},
