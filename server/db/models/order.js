@@ -6,7 +6,7 @@ const Order = db.define('order', {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
-  total: {
+  orderTotal: {
     type: Sequelize.INTEGER
     //allowNull: false?
   }
