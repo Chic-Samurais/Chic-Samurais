@@ -12,7 +12,12 @@ router.get('/', async (req, res, next) => {
       attributes: ['id', 'email']
       //For code review: do we want to exclude passwords to admins too if we're planning on protecting this route?
     })
-    res.json(users)
+
+    if (req.user && req.user.isAdmin) {
+      res.json(users)
+    } else {
+      res.send('Forbidden')
+    }
   } catch (err) {
     next(err)
   }
@@ -31,7 +36,15 @@ router.get('/:userId', async (req, res, next) => {
         }
       ]
     })
-    res.json(user)
+
+    if (
+      req.user &&
+      (req.user.id === Number(req.params.userId) || req.user.isAdmin)
+    ) {
+      res.json(user)
+    } else {
+      res.send('Forbidden')
+    }
   } catch (err) {
     next(err)
   }

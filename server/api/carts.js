@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Order, Product, OrderProduct} = require('../db/models')
+const {User, Order, Product, OrderProduct, Cart} = require('../db/models')
 module.exports = router
 
 //"VIEW CART" FOR LOGGED IN USERS OR GUESTS
@@ -17,9 +17,10 @@ router.get('/', async (req, res, next) => {
       console.log('this cart was created:', created, 'for user #', req.user.id) // remember to remove!!
       res.json(userCart)
     } else {
-      // guest
-
-      res.send('this person is a guest')
+      if (!req.session.cart) {
+        req.session.cart = new Cart()
+      }
+      res.json(req.session.cart)
     }
   } catch (err) {
     next(err)
