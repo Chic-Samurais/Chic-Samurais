@@ -62,31 +62,6 @@ router.get('/cart/:productId', async (req, res, next) => {
   }
 })
 
-// router.put('/cart/:productId', async (req, res, next) => {
-//   try {
-//     const [userCart, created] = await Order.findOrCreate({
-//       where: {userId: req.session.passport.user, isComplete: false},
-//       include: [
-//         {
-//           model: Product,
-//         },
-//       ],
-//     })
-
-//     const product = await Product.findByPk(req.params.productId)
-
-//     if (!userCart.products.includes(product)) {
-//       userCart.addProduct(product)
-//     }
-//     // console.log('this cart was created:', created) // remember to remove!!
-//     // console.log(req.session.passport.user)
-//     console.log('added product', product, 'created:', created)
-//     //remember to remove!!
-//     res.json(userCart)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
 //USER INFORMATION
 router.get('/', async (req, res, next) => {
   try {
