@@ -2,45 +2,6 @@ const router = require('express').Router()
 const {User, Order, Product, OrderProduct} = require('../db/models')
 module.exports = router
 
-//LOGGED IN USER CARTS
-router.get('/cart', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.user.id, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    console.log('this cart was created:', created) // remember to remove!!
-    console.log(req.user.id) //remember to remove!!
-    res.json(userCart)
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.get('/cart/:productId', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.user.id, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-
-    const product = await Product.findByPk(req.params.productId)
-    const orderProduct = await userCart.addProduct(product)
-    console.log(orderProduct)
-    res.json(orderProduct)
-  } catch (err) {
-    next(err)
-  }
-})
-
 router.get('/cart/:productId/put', async (req, res, next) => {
   try {
     const userCart = await Order.findOne({
