@@ -6,7 +6,7 @@ module.exports = router
 router.get('/cart', async (req, res, next) => {
   try {
     const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.session.passport.user, isComplete: false},
+      where: {userId: req.user.id, isComplete: false},
       include: [
         {
           model: Product
@@ -14,14 +14,59 @@ router.get('/cart', async (req, res, next) => {
       ]
     })
     console.log('this cart was created:', created) // remember to remove!!
-    console.log(req.session.passport.user) //remember to remove!!
+    console.log(req.user.id) //remember to remove!!
     res.json(userCart)
   } catch (err) {
     next(err)
   }
 })
 
-// router.get('/cart/:productId', async (req, res, next) => {
+router.get('/cart/:productId', async (req, res, next) => {
+  try {
+    const [userCart, created] = await Order.findOrCreate({
+      where: {userId: req.user.id, isComplete: false},
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+
+    const product = await Product.findByPk(req.params.productId)
+    const orderProduct = await userCart.addProduct(product)
+    console.log(orderProduct)
+    res.json(userCart.products.filter(prod => prod.id === req.params.productId))
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/cart/:productId/put', async (req, res, next) => {
+  try {
+    const userCart = await Order.findOne({
+      where: {userId: req.user.id, isComplete: false},
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+    const orderProduct = await OrderProduct.findOne({
+      where: {orderId: userCart.id, productId: req.params.productId}
+    })
+
+    console.log(orderProduct)
+    const updated = await orderProduct.update({
+      quantity: orderProduct.quantity + 1
+    })
+
+    res.json(updated)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// router.get('/cart/:productId/', async (req, res, next) => {
 //   try {
 //     const [userCart, created] = await Order.findOrCreate({
 //       where: {userId: req.session.passport.user, isComplete: false},
@@ -61,7 +106,6 @@ router.get('/cart', async (req, res, next) => {
 //     next(err)
 //   }
 // })
-
 //USER INFORMATION
 router.get('/', async (req, res, next) => {
   try {
