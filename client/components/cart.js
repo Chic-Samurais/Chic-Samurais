@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import {fetchCurrentOrder} from '../store/cart'
 
 export class Cart extends React.Component {
   constructor(props) {
@@ -9,11 +10,8 @@ export class Cart extends React.Component {
   }
 
   componentDidMount() {
-    console.log(
-      'Comp Did Mount - this.props.match.params',
-      this.props.match.params
-    )
-    this.props.fetchCurrentOrder(this.props.match.params)
+    console.log('Comp Did Mount - this.props.match.params', this.props.params)
+    this.props.fetchCurrentOrder(this.props.params)
   }
   render() {
     // const cart = this.state.cart || []

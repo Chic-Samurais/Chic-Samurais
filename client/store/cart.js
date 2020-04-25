@@ -42,8 +42,9 @@ const initialState = {
 //THUNKS
 
 export const fetchCurrentOrder = userId => async dispatch => {
+  console.log('------userId: ', userId)
   try {
-    const {data} = await axios.get(`/${userId}/cart`)
+    const {data} = await axios.get(`/api/users/${userId}/cart`)
     dispatch(getCurrentOrder(data))
   } catch (err) {
     console.error(err)
@@ -51,7 +52,7 @@ export const fetchCurrentOrder = userId => async dispatch => {
 }
 export const increaseQuant = (productId, userId) => async dispatch => {
   try {
-    const {data} = await axios.put(`/${userId}/cart/${productId}`)
+    const {data} = await axios.put(`/api/users/${userId}/cart/${productId}`)
     dispatch(increaseQty(data))
   } catch (err) {
     console.error(err)
@@ -59,7 +60,7 @@ export const increaseQuant = (productId, userId) => async dispatch => {
 }
 export const decreaseQuant = (productId, userId) => async dispatch => {
   try {
-    const {data} = await axios.put(`/${userId}/cart/${productId}`)
+    const {data} = await axios.put(`/api/users/${userId}/cart/${productId}`)
     dispatch(decreaseQty(data))
   } catch (err) {
     console.error(err)
@@ -67,7 +68,7 @@ export const decreaseQuant = (productId, userId) => async dispatch => {
 }
 export const deleteProd = (productId, userId) => async dispatch => {
   try {
-    const {data} = await axios.delete(`/${userId}/cart/${productId}`)
+    const {data} = await axios.delete(`/api/users/${userId}/cart/${productId}`)
     dispatch(deleteItem(data))
   } catch (err) {
     console.error(err)
@@ -75,7 +76,7 @@ export const deleteProd = (productId, userId) => async dispatch => {
 }
 export const checkoutCart = userId => async dispatch => {
   try {
-    const {data} = await axios.put(`/${userId}/cart`)
+    const {data} = await axios.put(`/api/users/${userId}/cart`)
     dispatch(checkout(data))
   } catch (err) {
     console.error(err)

@@ -5,14 +5,16 @@ module.exports = router
 //LOGGED IN USER CARTS
 router.get('/:userId/cart', async (req, res, next) => {
   try {
+    const userId = req.session.passport.user
     const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.session.passport.user, isComplete: false},
+      where: {userId: userId, isComplete: false},
       include: [
         {
           model: Product
         }
       ]
     })
+    console.log('/userId/cart --- CALLED!')
     console.log('this cart was created:', created) // remember to remove!!
     console.log(req.session.passport.user) //remember to remove!!
     res.json(userCart)
