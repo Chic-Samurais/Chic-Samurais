@@ -35,7 +35,7 @@ router.get('/cart/:productId', async (req, res, next) => {
     const product = await Product.findByPk(req.params.productId)
     const orderProduct = await userCart.addProduct(product)
     console.log(orderProduct)
-    res.json(userCart.products.filter(prod => prod.id === req.params.productId))
+    res.json(orderProduct)
   } catch (err) {
     next(err)
   }
@@ -106,6 +106,7 @@ router.get('/cart/:productId/put', async (req, res, next) => {
 //     next(err)
 //   }
 // })
+
 //USER INFORMATION
 router.get('/', async (req, res, next) => {
   try {
