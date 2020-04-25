@@ -2,72 +2,6 @@ const router = require('express').Router()
 const {User, Order, Product, OrderProduct} = require('../db/models')
 module.exports = router
 
-router.get('/cart/:productId/put', async (req, res, next) => {
-  try {
-    const userCart = await Order.findOne({
-      where: {userId: req.user.id, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    const orderProduct = await OrderProduct.findOne({
-      where: {orderId: userCart.id, productId: req.params.productId}
-    })
-
-    console.log(orderProduct)
-    const updated = await orderProduct.update({
-      quantity: orderProduct.quantity + 1
-    })
-
-    res.json(updated)
-  } catch (err) {
-    next(err)
-  }
-})
-
-// router.get('/cart/:productId/', async (req, res, next) => {
-//   try {
-//     const [userCart, created] = await Order.findOrCreate({
-//       where: {userId: req.session.passport.user, isComplete: false},
-//       include: [
-//         {
-//           model: Product
-//         }
-//       ]
-//     })
-
-//     const product = await Product.findByPk(req.params.productId)
-
-//     if (
-//       !userCart.products.filter(prod => {
-//         return prod.id === req.params.productId
-//       }).length
-//     ) {
-//       console.log(
-//         userCart.products.find(prod => prod.id === req.params.productId)
-//       )
-//       await userCart.addProduct(product)
-//     } else {
-//       const orderProduct = await OrderProduct.findOne({
-//         where: {orderId: userCart.id, productId: req.params.productId}
-//       })
-//       const updatedProduct = orderProduct.update({
-//         quantity: orderProduct.quantity + 1
-//       })
-//       console.log(updatedProduct.quantity)
-//     }
-//     // console.log('this cart was created:', created) // remember to remove!!
-//     // console.log(req.session.passport.user)
-//     // console.log('added product', product, 'created:', created)
-//     //remember to remove!!
-//     res.json(userCart)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
 //USER INFORMATION
 router.get('/', async (req, res, next) => {
   try {
@@ -128,41 +62,6 @@ router.delete('/:userId', async (req, res, next) => {
     const user = await User.findByPk(req.params.userId)
     await user.destroy()
     res.sendStatus(204)
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.get('/:userId/cart', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.params.userId, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    console.log('this cart was created:', created)
-    console.log(req.session.passport.user)
-    res.json(userCart)
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.put('/:userId/cart/:productId', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.params.userId, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    console.log('this cart was created:', created)
-    res.json(userCart)
   } catch (err) {
     next(err)
   }
