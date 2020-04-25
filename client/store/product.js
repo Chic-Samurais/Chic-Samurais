@@ -3,7 +3,7 @@ import history from '../history'
 import {func} from 'prop-types'
 
 /**
- * ACTION TYPES
+ * ACTION CREATORS
  */
 const GET_PRODUCTS = 'GET_PRODUCTS' //getting all products
 const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT'
