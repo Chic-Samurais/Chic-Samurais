@@ -78,6 +78,7 @@ router.delete('/', async (req, res, next) => {
     next(error)
   }
 })
+
 // mounted on /cart/:productId
 //ADDING/POSTING A NEW, UNIQUE ITEM TO A CART Or increments existing item
 router.post('/:productId', async (req, res, next) => {
@@ -126,6 +127,7 @@ router.post('/:productId', async (req, res, next) => {
   }
 })
 
+// cart/:productId - removes all of one item
 //should be a PUT (confirm NOT a delete request), will be to remove a particular item in our cart, regardless of quantity
 router.put('/:productId', async (req, res, next) => {
   try {
