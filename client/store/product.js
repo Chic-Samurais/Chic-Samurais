@@ -19,6 +19,7 @@ const getProducts = retrievedProducts => ({
   retrievedProducts
 })
 const getSingleProduct = id => ({type: GET_SINGLE_PRODUCT, id})
+
 const updateProduct = product => ({type: UPDATE_PRODUCT, product})
 const createProduct = product => ({type: CREATE_PRODUCT, product})
 const removeProduct = id => ({type: REMOVE_PRODUCT, id})
@@ -51,6 +52,16 @@ export const fetchSingleProduct = productId => async dispatch => {
   }
 }
 
+export const postNewProduct = product => async dispatch => {
+  try {
+    const {data} = await axios.post('/api/products', product)
+    const action = createProduct(data)
+    dispatch(action)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export const deleteProduct = id => async dispatch => {
   try {
     const {data} = await axios.delete(`api/product/${id}`)
@@ -72,6 +83,12 @@ export default function productReducer(state = initialProductState, action) {
       }
     case GET_SINGLE_PRODUCT:
       return action.id
+
+    case CREATE_PRODUCT:
+      return {
+        ...state,
+        allProducts: [state.allProducts, action.product]
+      }
 
     case REMOVE_PRODUCT:
       return {

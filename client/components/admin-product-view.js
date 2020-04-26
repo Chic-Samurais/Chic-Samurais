@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchProducts, deleteProduct} from '../store/product'
+import {fetchProducts, deleteProduct, postNewProduct} from '../store/product'
 import {Link} from 'react-router-dom'
+import AddProductForm from './add-product-form'
 
 export class AdminProducts extends React.Component {
   constructor(props) {
@@ -9,10 +10,14 @@ export class AdminProducts extends React.Component {
     this.state = {}
     // this.handleChange = this.handleChange.bind(this)
     // this.handleSubmit = this.handleSubmit.bind(this)
-    // this.handleDelete = this.handleDelete.bind(this);
+    this.handleDelete = this.handleDelete.bind(this)
   }
   componentDidMount() {
     this.props.fetchProducts()
+  }
+
+  handleDelete(id) {
+    this.props.deleteProduct(id)
   }
 
   render() {
@@ -21,7 +26,7 @@ export class AdminProducts extends React.Component {
       <div id="allProducts">
         {products.map(product => (
           <div key={product.id} className="allProductMapped">
-            <Link to={`products/${product.id}`}>
+            <Link to={`/products/${product.id}`}>
               <img
                 src={product.imageUrl}
                 className="allProductImg"
@@ -42,6 +47,7 @@ export class AdminProducts extends React.Component {
             </p>
           </div>
         ))}
+        <AddProductForm postNewProduct={this.props.postNewProduct} />
       </div>
     )
   }
@@ -53,6 +59,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => ({
   fetchProducts: () => dispatch(fetchProducts()),
+  postNewProduct: product => dispatch(postNewProduct(product)),
   deleteProduct: id => dispatch(deleteProduct(id))
 })
 export default connect(mapState, mapDispatch)(AdminProducts)
