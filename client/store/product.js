@@ -64,9 +64,18 @@ export const postNewProduct = product => async dispatch => {
 
 export const deleteProduct = id => async dispatch => {
   try {
-    const res = await axios.delete(`api/product/${id}`)
-    //this needs to be adjusted per notes
+    await axios.delete(`/api/products/${id}`)
     const action = removeProduct(id)
+    dispatch(action)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const editProduct = (id, formData) => async dispatch => {
+  try {
+    const {data} = await axios.put(`/api/products/${id}`, formData)
+    const action = updateProduct(data)
     dispatch(action)
   } catch (error) {
     console.error(error)
@@ -87,7 +96,7 @@ export default function productReducer(state = initialProductState, action) {
     case CREATE_PRODUCT:
       return {
         ...state,
-        allProducts: [state.allProducts, action.product]
+        allProducts: [...state.allProducts, action.product]
       }
 
     case REMOVE_PRODUCT:

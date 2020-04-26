@@ -38,14 +38,14 @@ export default class AddProductForm extends Component {
 
   render() {
     return (
-      <form onSubmit={event => this.handleSubmit(event)}>
+      <form onSubmit={this.handleSubmit}>
         <h3>Add Poster</h3>
         <label>
           Poster Title:
           <input
             type="text"
             name="title"
-            onChange={event => this.handleChange(event)}
+            onChange={this.handleChange}
             value={this.state.title}
           />
         </label>

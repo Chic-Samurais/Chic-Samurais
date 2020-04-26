@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {fetchProducts, deleteProduct, postNewProduct} from '../store/product'
 import {Link} from 'react-router-dom'
 import AddProductForm from './add-product-form'
+import EditProductForm from './edit-product-form'
 
 export class AdminProducts extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ export class AdminProducts extends React.Component {
     // this.handleChange = this.handleChange.bind(this)
     // this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
   }
   componentDidMount() {
     this.props.fetchProducts()
@@ -18,6 +20,10 @@ export class AdminProducts extends React.Component {
 
   handleDelete(id) {
     this.props.deleteProduct(id)
+  }
+
+  handleEdit(id) {
+    this.props.editProduct(id)
   }
 
   render() {
@@ -60,6 +66,7 @@ const mapState = state => {
 const mapDispatch = dispatch => ({
   fetchProducts: () => dispatch(fetchProducts()),
   postNewProduct: product => dispatch(postNewProduct(product)),
-  deleteProduct: id => dispatch(deleteProduct(id))
+  deleteProduct: id => dispatch(deleteProduct(id)),
+  editProduct: id => dispatch(editProduct(id))
 })
 export default connect(mapState, mapDispatch)(AdminProducts)

@@ -24,7 +24,7 @@ router.get('/:productId', async (req, res, next) => {
 })
 
 //ADMIN  ROUTES
-//I changed this get route to a post route and the path from '/post' to '/' -ccg
+//I changed this get route to a post route and the path from '/post' to '/'
 router.post('/', async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
@@ -54,6 +54,7 @@ router.get('/:productId/put', async (req, res, next) => {
 
 router.delete('/:productId', async (req, res, next) => {
   try {
+    // debugger
     if (req.user && req.user.isAdmin) {
       const product = await Product.findByPk(req.params.productId)
       await product.destroy()
