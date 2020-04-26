@@ -17,6 +17,7 @@ router.get('/', async (req, res, next) => {
       console.log('this cart was created:', created, 'for user #', req.user.id) // remember to remove!!
       res.json(userCart)
     } else {
+      console.log(req.session.cart)
       if (!req.session.cart) {
         req.session.cart = new Cart()
       }
@@ -26,31 +27,25 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
-//should be a delete request
-router.get('/delete', async (req, res, next) => {
+
+router.delete('/', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false}
-        // include: [
-        //   {
-        //     model: Product
-        //   }
-        // ]
       })
-
       // console.log('this cart was found:', userCart.id, 'for user #', req.user.id) // remember to remove!!
       const emptied = await userCart.removeProducts(
         await userCart.getProducts()
       )
       console.log('number of products removed is: ', emptied)
       const emptiedCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
-        // include: [
-        //   {
-        //     model: Product
-        //   }
-        // ]
+        where: {userId: req.user.id, isComplete: false},
+        include: [
+          {
+            model: Product
+          }
+        ]
       })
       res.json(emptiedCart)
     } else {
