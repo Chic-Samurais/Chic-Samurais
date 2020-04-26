@@ -19,7 +19,6 @@ router.get('/', async (req, res, next) => {
     } else {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
       req.session.cart = cart
-      console.log('is there a cart on session?', req.session.cart)
       res.json(cart)
     }
   } catch (err) {
@@ -54,7 +53,6 @@ router.delete('/', async (req, res, next) => {
       const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false}
       })
-      // console.log('this cart was found:', userCart.id, 'for user #', req.user.id) // remember to remove!!
       const emptied = await userCart.removeProducts(
         await userCart.getProducts()
       )
@@ -74,8 +72,6 @@ router.delete('/', async (req, res, next) => {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
       cart.clearCart()
       req.session.cart = cart
-      console.log('DELETE req.session.cart', req.session.cart)
-      console.log('DELETE- cart', cart)
       res.json(req.session.cart)
     }
   } catch (error) {
@@ -83,7 +79,7 @@ router.delete('/', async (req, res, next) => {
   }
 })
 // mounted on /cart/:productId
-//ADDING/POSTING A NEW, UNIQUE ITEM TO A CART
+//ADDING/POSTING A NEW, UNIQUE ITEM TO A CART Or increments existing item
 router.post('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.productId)
@@ -91,7 +87,16 @@ router.post('/:productId', async (req, res, next) => {
       const [userCart, created] = await Order.findOrCreate({
         where: {userId: req.user.id, isComplete: false}
       })
-      await userCart.addProduct(product)
+      const orderProduct = await OrderProduct.findOne({
+        where: {orderId: userCart.id, productId: req.params.productId}
+      })
+      if (!orderProduct) {
+        await userCart.addProduct(product)
+      } else {
+        await orderProduct.update({
+          quantity: orderProduct.quantity + 1
+        })
+      }
       const updatedCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
         include: [
@@ -114,8 +119,6 @@ router.post('/:productId', async (req, res, next) => {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
       cart.add(product, product.id)
       req.session.cart = cart
-      console.log('is there a cart on session?', req.session.cart)
-      console.log('POST -cart', cart)
       res.json(cart)
     }
   } catch (err) {
@@ -149,8 +152,10 @@ router.put('/:productId', async (req, res, next) => {
       )
       res.json(updatedCart)
     } else {
-      //guest - splice on the cart.items array?
-      res.send('this person is a guest')
+      const cart = new Cart(req.session.cart ? req.session.cart : {})
+      cart.removeItem(req.params.productId)
+      req.session.cart = cart
+      res.json(cart)
     }
   } catch (error) {
     next(error)
