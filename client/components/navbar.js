@@ -17,7 +17,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
           </a>
           <Link to="/products">Products</Link>
           <Link to="/users/:userId/cart">Cart</Link>
-          {/* <link to="/admin/products">Admin</link> */}
+          <Link to="/admin/products">Admin</Link>
         </div>
       ) : (
         <div>

@@ -8,6 +8,7 @@ import AllProducts from './components/all-products'
 import SingleProduct from './components/single-product'
 import Cart from './components/cart'
 import AdminProducts from './components/admin-product-view'
+import AdminSingleProduct from './components/admin-single-product-view'
 
 /**
  * COMPONENT
@@ -36,7 +37,16 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/users/:userId/cart" component={Cart} />
-            <Route exact path="/admin/products" component={AdminProducts} />
+            <Route
+              exact
+              path="/admin/products"
+              render={routeProps => <AdminProducts {...routeProps} />}
+            />
+            <Route
+              exact
+              path="/admin/products/:productId"
+              render={routeProps => <AdminSingleProduct {...routeProps} />}
+            />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

@@ -8,7 +8,6 @@ import {
 } from '../store/product'
 import {Link} from 'react-router-dom'
 import AddProductForm from './add-product-form'
-import EditProductForm from './edit-product-form'
 
 export class AdminProducts extends React.Component {
   constructor(props) {
@@ -37,7 +36,7 @@ export class AdminProducts extends React.Component {
       <div id="allProducts">
         {products.map(product => (
           <div key={product.id} className="allProductMapped">
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/admin/products/${product.id}`}>
               <img
                 src={product.imageUrl}
                 className="allProductImg"
@@ -56,7 +55,6 @@ export class AdminProducts extends React.Component {
                 Delete Product
               </button>{' '}
             </p>
-            <EditProductForm editProduct={this.props.editProduct} />
           </div>
         ))}
         <AddProductForm postNewProduct={this.props.postNewProduct} />
