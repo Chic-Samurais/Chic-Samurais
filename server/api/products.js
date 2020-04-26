@@ -38,7 +38,7 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.get('/:productId/put', async (req, res, next) => {
+router.put('/:productId', async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
       const product = await Product.findByPk(req.params.productId)
