@@ -68,23 +68,29 @@ router.delete('/', async (req, res, next) => {
         ]
       })
       res.json(emptiedCart)
+    } else if (!req.session.cart) {
+      res.send('Your cart is empty')
     } else {
-      // guest, perhaps call a method on the cart? like req.session.cart.EMPTYCART();
-      res.send('this person is a guest')
+      const cart = new Cart(req.session.cart ? req.session.cart : {})
+      cart.clearCart()
+      req.session.cart = cart
+      console.log('DELETE req.session.cart', req.session.cart)
+      console.log('DELETE- cart', cart)
+      res.json(req.session.cart)
     }
   } catch (error) {
     next(error)
   }
 })
-
+// mounted on /cart/:productId
 //ADDING/POSTING A NEW, UNIQUE ITEM TO A CART
 router.post('/:productId', async (req, res, next) => {
   try {
+    const product = await Product.findByPk(req.params.productId)
     if (req.user) {
       const [userCart, created] = await Order.findOrCreate({
         where: {userId: req.user.id, isComplete: false}
       })
-      const product = await Product.findByPk(req.params.productId)
       await userCart.addProduct(product)
       const updatedCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
@@ -105,7 +111,12 @@ router.post('/:productId', async (req, res, next) => {
       res.json(updatedCart)
     } else {
       //guest - for this do a method to extrapolate product data and push to items array
-      res.send('this person is a guest')
+      const cart = new Cart(req.session.cart ? req.session.cart : {})
+      cart.add(product, product.id)
+      req.session.cart = cart
+      console.log('is there a cart on session?', req.session.cart)
+      console.log('POST -cart', cart)
+      res.json(cart)
     }
   } catch (err) {
     next(err)
@@ -146,32 +157,36 @@ router.put('/:productId', async (req, res, next) => {
   }
 })
 
+// cart/:productId/increment
+//adds one to qty of item in cart
 //INCREMENT PUT REQUEST - would we want to do a form?
-router.put('/:productId/increment', async (req, res, next) => {
-  try {
-    if (req.user) {
-      const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
-      })
-      const orderProduct = await OrderProduct.findOne({
-        where: {orderId: userCart.id, productId: req.params.productId}
-      })
-      await orderProduct.update({
-        quantity: orderProduct.quantity + 1
-      })
-      const updatedCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [{model: Product}]
-      })
-      res.json(updatedCart)
-    } else {
-      res.json('this user is a guest') //work on guest cart
-    }
-  } catch (err) {
-    next(err)
-  }
-})
+// router.put('/:productId/increment', async (req, res, next) => {
+//   try {
+//     if (req.user) {
+//       const userCart = await Order.findOne({
+//         where: {userId: req.user.id, isComplete: false},
+//       })
+//       const orderProduct = await OrderProduct.findOne({
+//         where: {orderId: userCart.id, productId: req.params.productId},
+//       })
+//       await orderProduct.update({
+//         quantity: orderProduct.quantity + 1,
+//       })
+//       const updatedCart = await Order.findOne({
+//         where: {userId: req.user.id, isComplete: false},
+//         include: [{model: Product}],
+//       })
+//       res.json(updatedCart)
+//     } else {
+//       res.json('this user is a guest') //work on guest cart
+//     }
+//   } catch (err) {
+//     next(err)
+//   }
+// })
 
+//cart/:productid/decrement -- remove one instance of the item
+//if only once instance is in cart, deletes item
 router.put('/:productId/decrement', async (req, res, next) => {
   try {
     if (req.user) {
@@ -196,8 +211,13 @@ router.put('/:productId/decrement', async (req, res, next) => {
         include: [{model: Product}]
       })
       res.json(updatedCart)
+    } else if (req.session.cart.items[req.params.productId]) {
+      const cart = new Cart(req.session.cart ? req.session.cart : {})
+      cart.minusOne(req.params.productId)
+      req.session.cart = cart
+      res.json(cart)
     } else {
-      res.json('this user is a guest') //work on guest cart
+      res.send('this item is not in your cart')
     }
   } catch (err) {
     next(err)
