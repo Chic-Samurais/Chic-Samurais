@@ -1,6 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchProducts, deleteProduct, postNewProduct} from '../store/product'
+import {
+  fetchProducts,
+  deleteProduct,
+  postNewProduct,
+  editProduct
+} from '../store/product'
 import {Link} from 'react-router-dom'
 import AddProductForm from './add-product-form'
 import EditProductForm from './edit-product-form'
@@ -51,6 +56,7 @@ export class AdminProducts extends React.Component {
                 Delete Product
               </button>{' '}
             </p>
+            <EditProductForm editProduct={this.props.editProduct} />
           </div>
         ))}
         <AddProductForm postNewProduct={this.props.postNewProduct} />
