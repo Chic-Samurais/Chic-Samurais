@@ -51,6 +51,18 @@ export const fetchSingleProduct = productId => async dispatch => {
   }
 }
 
+export const deleteProduct = id => async dispatch => {
+  try {
+    const {data} = await axios.delete(`api/product/${id}`)
+    //this needs to be adjusted per notes
+    const action = removeProduct(id)
+    dispatch(action)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+//REDUCER
 export default function productReducer(state = initialProductState, action) {
   switch (action.type) {
     case GET_PRODUCTS:
@@ -60,6 +72,14 @@ export default function productReducer(state = initialProductState, action) {
       }
     case GET_SINGLE_PRODUCT:
       return action.id
+
+    case REMOVE_PRODUCT:
+      return {
+        allProducts: state.allProducts.filter(
+          product => product.id !== action.id
+        )
+      }
+
     default:
       return state
   }
