@@ -17,11 +17,10 @@ router.get('/', async (req, res, next) => {
       console.log('this cart was created:', created, 'for user #', req.user.id) // remember to remove!!
       res.json(userCart)
     } else {
-      console.log(req.session.cart)
-      if (!req.session.cart) {
-        req.session.cart = new Cart()
-      }
-      res.json(req.session.cart)
+      const cart = new Cart(req.session.cart ? req.session.cart : {})
+      req.session.cart = cart
+      console.log('is there a cart on session?', req.session.cart)
+      res.json(cart)
     }
   } catch (err) {
     next(err)

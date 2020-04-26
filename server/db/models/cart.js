@@ -3,16 +3,27 @@
 //in the future, reduce to find total # of items in cart
 
 module.exports = class Cart {
-  constructor() {
-    this.items = []
-    this.orderTotal = this.getTotal()
+  constructor(oldCart) {
+    this.items = oldCart.items || {}
+    this.totalQty = oldCart.totalQty || 0
+    this.totalPrice = oldCart.totalPrice || 0
   }
-
-  getTotal() {
-    let sum = 0
-    this.items.forEach(item => {
-      sum += item.price * item.quantity
-    })
-    return sum
+  add(item, id) {
+    let storedItem = this.items[id]
+    if (!storedItem) {
+      storedItem = this.items[id] = {item: item, qty: 0, price: 0}
+    }
+    storedItem.qty++
+    storedItem.price = storedItem.item.price * storedItem.qty
+    this.totalQty++
+    this.totalPrice += storedItem.item.price
+    // let sum = 0
+    // this.items.forEach(item => {
+    //   sum += item.price * item.quantity
+    // })
+    // return sum
+  }
+  generateArray() {
+    return Object.values(this.items)
   }
 }
