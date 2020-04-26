@@ -24,7 +24,8 @@ router.get('/:productId', async (req, res, next) => {
 })
 
 //ADMIN  ROUTES
-router.get('/post', async (req, res, next) => {
+//I changed this get route to a post route and the path from '/post' to '/' -ccg
+router.post('/', async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
       const newProduct = await Product.create(req.body)

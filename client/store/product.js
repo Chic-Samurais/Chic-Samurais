@@ -64,7 +64,7 @@ export const postNewProduct = product => async dispatch => {
 
 export const deleteProduct = id => async dispatch => {
   try {
-    const {data} = await axios.delete(`api/product/${id}`)
+    const res = await axios.delete(`api/product/${id}`)
     //this needs to be adjusted per notes
     const action = removeProduct(id)
     dispatch(action)
