@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Order, Product, OrderProduct} = require('../db/models')
+const {User, Order} = require('../db/models')
 module.exports = router
 
 //USER INFORMATION - check if we should be using MIDDLEWARE for security

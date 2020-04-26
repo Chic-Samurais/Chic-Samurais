@@ -28,6 +28,27 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+//GET ROUTE FOR A SPECIFIC ITEM WITHIN A CART, WOULD THIS BE NECESSARY FOR ANY REASON?
+router.get('/:productId', async (req, res, next) => {
+  try {
+    if (req.user) {
+      const userCart = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false},
+        include: [
+          {
+            model: Product,
+            where: {id: req.params.productId}
+          }
+        ]
+      })
+      res.json(userCart)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+//EMPTY ENTIRE CART FOR LOGGED IN USERS AND GUESTS
 router.delete('/', async (req, res, next) => {
   try {
     if (req.user) {
@@ -49,8 +70,7 @@ router.delete('/', async (req, res, next) => {
       })
       res.json(emptiedCart)
     } else {
-      // guest
-
+      // guest, perhaps call a method on the cart? like req.session.cart.EMPTYCART();
       res.send('this person is a guest')
     }
   } catch (error) {
@@ -58,17 +78,12 @@ router.delete('/', async (req, res, next) => {
   }
 })
 
-//should be a post to add to a logged in users cart
-router.get('/:productId', async (req, res, next) => {
+//ADDING/POSTING A NEW, UNIQUE ITEM TO A CART
+router.post('/:productId', async (req, res, next) => {
   try {
     if (req.user) {
       const [userCart, created] = await Order.findOrCreate({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product
-          }
-        ]
+        where: {userId: req.user.id, isComplete: false}
       })
       const product = await Product.findByPk(req.params.productId)
       await userCart.addProduct(product)
@@ -80,7 +95,6 @@ router.get('/:productId', async (req, res, next) => {
           }
         ]
       })
-
       console.log(
         'this cart was created:',
         created,
@@ -91,7 +105,7 @@ router.get('/:productId', async (req, res, next) => {
       )
       res.json(updatedCart)
     } else {
-      //guest
+      //guest - for this do a method to extrapolate product data and push to items array
       res.send('this person is a guest')
     }
   } catch (err) {
@@ -99,17 +113,12 @@ router.get('/:productId', async (req, res, next) => {
   }
 })
 
-//should be a delete request, will be to remove all of a particular item in our cart
-router.get('/:productId/delete', async (req, res, next) => {
+//should be a PUT (confirm NOT a delete request), will be to remove a particular item in our cart, regardless of quantity
+router.put('/:productId', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product
-          }
-        ]
+        where: {userId: req.user.id, isComplete: false}
       })
       const product = await Product.findByPk(req.params.productId)
       const promise = await userCart.removeProduct(product)
@@ -122,7 +131,6 @@ router.get('/:productId/delete', async (req, res, next) => {
           }
         ]
       })
-
       console.log(
         'this product was removed:',
         product.title,
@@ -131,7 +139,7 @@ router.get('/:productId/delete', async (req, res, next) => {
       )
       res.json(updatedCart)
     } else {
-      //guest
+      //guest - splice on the cart.items array?
       res.send('this person is a guest')
     }
   } catch (error) {
@@ -139,27 +147,59 @@ router.get('/:productId/delete', async (req, res, next) => {
   }
 })
 
-//should be a put to manipulate the quantity of a product they already have in their cart
-router.get('/:productId/put', async (req, res, next) => {
+//INCREMENT PUT REQUEST - would we want to do a form?
+router.put('/:productId/increment', async (req, res, next) => {
   try {
-    const userCart = await Order.findOne({
-      where: {userId: req.user.id, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    const orderProduct = await OrderProduct.findOne({
-      where: {orderId: userCart.id, productId: req.params.productId}
-    })
+    if (req.user) {
+      const userCart = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false}
+      })
+      const orderProduct = await OrderProduct.findOne({
+        where: {orderId: userCart.id, productId: req.params.productId}
+      })
+      await orderProduct.update({
+        quantity: orderProduct.quantity + 1
+      })
+      const updatedCart = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false},
+        include: [{model: Product}]
+      })
+      res.json(updatedCart)
+    } else {
+      res.json('this user is a guest') //work on guest cart
+    }
+  } catch (err) {
+    next(err)
+  }
+})
 
-    console.log(orderProduct)
-    const updated = await orderProduct.update({
-      quantity: orderProduct.quantity + 1
-    })
+router.put('/:productId/decrement', async (req, res, next) => {
+  try {
+    if (req.user) {
+      const userCart = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false}
+      })
+      const orderProduct = await OrderProduct.findOne({
+        where: {orderId: userCart.id, productId: req.params.productId}
+      })
 
-    res.json(updated)
+      // check that the quantity is greater than 1, otherwise detroy the orderProduct association. Do we want this from a UX perspective?
+      if (orderProduct.quantity > 1) {
+        await orderProduct.update({
+          quantity: orderProduct.quantity - 1
+        })
+      } else {
+        orderProduct.destroy() //or use magic method
+      }
+
+      const updatedCart = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false},
+        include: [{model: Product}]
+      })
+      res.json(updatedCart)
+    } else {
+      res.json('this user is a guest') //work on guest cart
+    }
   } catch (err) {
     next(err)
   }
