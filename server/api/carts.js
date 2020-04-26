@@ -15,6 +15,7 @@ router.get('/', async (req, res, next) => {
         ]
       })
       console.log('this cart was created:', created, 'for user #', req.user.id) // remember to remove!!
+      console.log('user cart - cart total method', userCart.getOrderTotal())
       res.json(userCart)
     } else {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
@@ -81,7 +82,7 @@ router.delete('/', async (req, res, next) => {
 
 // mounted on /cart/:productId
 //ADDING/POSTING A NEW, UNIQUE ITEM TO A CART Or increments existing item
-router.post('/:productId', async (req, res, next) => {
+router.get('/:productId/post', async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.productId)
     if (req.user) {

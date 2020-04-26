@@ -8,9 +8,21 @@ const Order = db.define('order', {
     defaultValue: false
   },
   orderTotal: {
-    type: Sequelize.INTEGER
-    //allowNull: false?
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  },
+  name: {
+    type: Sequelize.STRING
+  },
+  address: {
+    type: Sequelize.STRING
   }
 })
+
+Order.prototype.getOrderTotal = function() {
+  return this.products.reduce((total, product) => {
+    total += product.price * product.orderProduct.quantity
+  }, 0)
+}
 
 module.exports = Order
