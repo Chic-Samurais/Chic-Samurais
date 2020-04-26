@@ -1,78 +1,20 @@
 const router = require('express').Router()
-const {User, Order, Product, OrderProduct} = require('../db/models')
+const {User, Order} = require('../db/models')
 module.exports = router
 
-//LOGGED IN USER CARTS
-router.get('/cart', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.session.passport.user, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    console.log('this cart was created:', created) // remember to remove!!
-    console.log(req.session.passport.user) //remember to remove!!
-    res.json(userCart)
-  } catch (err) {
-    next(err)
-  }
-})
-
-// router.get('/cart/:productId', async (req, res, next) => {
-//   try {
-//     const [userCart, created] = await Order.findOrCreate({
-//       where: {userId: req.session.passport.user, isComplete: false},
-//       include: [
-//         {
-//           model: Product
-//         }
-//       ]
-//     })
-
-//     const product = await Product.findByPk(req.params.productId)
-
-//     if (
-//       !userCart.products.filter(prod => {
-//         return prod.id === req.params.productId
-//       }).length
-//     ) {
-//       console.log(
-//         userCart.products.find(prod => prod.id === req.params.productId)
-//       )
-//       await userCart.addProduct(product)
-//     } else {
-//       const orderProduct = await OrderProduct.findOne({
-//         where: {orderId: userCart.id, productId: req.params.productId}
-//       })
-//       const updatedProduct = orderProduct.update({
-//         quantity: orderProduct.quantity + 1
-//       })
-//       console.log(updatedProduct.quantity)
-//     }
-//     // console.log('this cart was created:', created) // remember to remove!!
-//     // console.log(req.session.passport.user)
-//     // console.log('added product', product, 'created:', created)
-//     //remember to remove!!
-//     res.json(userCart)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-//USER INFORMATION
+//USER INFORMATION - check if we should be using MIDDLEWARE for security
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
-      // explicitly select only the id and email fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
+      // explicitly select only the id and email fields - even though users' passwords are encrypted, it won't help if we just send everything to anyone who asks!
       attributes: ['id', 'email']
       //For code review: do we want to exclude passwords to admins too if we're planning on protecting this route?
     })
-    res.json(users)
+    if (req.user && req.user.isAdmin) {
+      res.json(users)
+    } else {
+      res.sendStatus(403) // is this correct or should we change this to middleware/redirect?
+    }
   } catch (err) {
     next(err)
   }
@@ -85,33 +27,38 @@ router.get('/:userId', async (req, res, next) => {
       include: [
         {
           model: Order
-          // through: {
-          // attributes: ['id', 'email'],
-          // },
         }
       ]
     })
-    res.json(user)
+
+    if (
+      req.user &&
+      (req.user.id === Number(req.params.userId) || req.user.isAdmin)
+    ) {
+      res.json(user)
+    } else {
+      res.sendStatus(403)
+    }
   } catch (err) {
     next(err)
   }
 })
 
-// POST ROUTES FOR USERS IN AUTH
-// router.post('/', async (req, res, next) => {
-//   try {
-//     const newUser = await User.create(req.body) //destructure off of here??
-//     res.json(newUser) // res.redirecct?? what do we want rendered here/sent to redux store???
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+// POST ROUTES FOR USERS - DO WE NEED TO IF USERS SIGN THEMSELVES UP?
 
+//WE NEED A USER FORM COMPONENT ON THE FRONT END FOR USER EDITS/UPDATES - how should we handle that? is that tier 1?
 router.put('/:userId', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.userId)
-    const updated = await user.update(req.body) // hide/destructure somehow?
-    res.json(updated) // what do we want sent? possibility of redirect?
+    if (
+      req.user &&
+      (req.user.id === Number(req.params.userId) || req.user.isAdmin)
+    ) {
+      const user = await User.findByPk(req.params.userId)
+      const updated = await user.update(req.body) // hide/destructure somehow?
+      res.json(updated) // what do we want sent? possibility of redirect?
+    } else {
+      res.sendStatus(403)
+    }
   } catch (err) {
     next(err)
   }
@@ -119,44 +66,16 @@ router.put('/:userId', async (req, res, next) => {
 
 router.delete('/:userId', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.userId)
-    await user.destroy()
-    res.sendStatus(204)
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.get('/:userId/cart', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.params.userId, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    console.log('this cart was created:', created)
-    console.log(req.session.passport.user)
-    res.json(userCart)
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.put('/:userId/cart/:productId', async (req, res, next) => {
-  try {
-    const [userCart, created] = await Order.findOrCreate({
-      where: {userId: req.params.userId, isComplete: false},
-      include: [
-        {
-          model: Product
-        }
-      ]
-    })
-    console.log('this cart was created:', created)
-    res.json(userCart)
+    if (
+      req.user &&
+      (req.user.id === Number(req.params.userId) || req.user.isAdmin)
+    ) {
+      const user = await User.findByPk(req.params.userId)
+      await user.destroy()
+      res.sendStatus(403)
+    } else {
+      res.send('Forbidden')
+    }
   } catch (err) {
     next(err)
   }
