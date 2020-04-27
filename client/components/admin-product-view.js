@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import {
   fetchProducts,
   deleteProduct,
-  postNewProduct,
-  editProduct
+  postNewProduct
 } from '../store/product'
 import {Link} from 'react-router-dom'
 import AddProductForm from './add-product-form'
@@ -68,7 +67,6 @@ const mapState = state => {
 const mapDispatch = dispatch => ({
   fetchProducts: () => dispatch(fetchProducts()),
   postNewProduct: product => dispatch(postNewProduct(product)),
-  deleteProduct: id => dispatch(deleteProduct(id)),
-  editProduct: id => dispatch(editProduct(id))
+  deleteProduct: id => dispatch(deleteProduct(id))
 })
 export default connect(mapState, mapDispatch)(AdminProducts)

@@ -107,17 +107,7 @@ export default function productReducer(state = initialProductState, action) {
       }
 
     case UPDATE_PRODUCT:
-      const updated = state.allProducts.map(product => {
-        if (product.id === action.id) {
-          return action.product
-        } else {
-          return product
-        }
-      })
-      return {
-        ...state,
-        allProducts: updated
-      }
+      return action.product
     default:
       return state
   }

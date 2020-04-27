@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {editProduct} from '../store/product'
 
-export default class EditProductForm extends Component {
+export class EditProductForm extends Component {
   constructor() {
     super()
     this.state = {
@@ -82,3 +84,12 @@ export default class EditProductForm extends Component {
     )
   }
 }
+
+const mapState = state => {
+  return {product: state.product}
+}
+const mapDispatch = dispatch => ({
+  editProduct: (id, formData) => dispatch(editProduct(id, formData))
+})
+
+export default connect(mapState, mapDispatch)(EditProductForm)
