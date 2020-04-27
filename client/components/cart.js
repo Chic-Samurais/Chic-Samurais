@@ -10,15 +10,19 @@ export class Cart extends React.Component {
   }
 
   componentDidMount() {
+    this.props.fetchCurrentOrder()
     // console.log('RENDER - cart', cart)
     // console.log('RENDER-- USER', user)
-    console.log('P A R A M S', this.params)
+    // console.log('P A R A M S', this.params)
     console.log('mad props yo', this.props)
-    console.log(state)
+    console.log('state is: ', this.state)
+  }
+  render() {
+    const cart = this.props.cart || []
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {/* {cart.map((product) => (
+        {cart.map(product => (
           <div key={product.id}>
             <img
               src={product.imageUrl}
@@ -29,13 +33,13 @@ export class Cart extends React.Component {
             <h3>{product.title}</h3>
             <p>{product.quantity}</p>
           </div>
-        ))} */}
+        ))}
       </div>
     )
   }
 }
 const mapState = state => {
-  return {state}
+  return {cart: state.cart.cart}
 }
 
 const mapDispatch = dispatch => ({
