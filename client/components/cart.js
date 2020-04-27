@@ -10,13 +10,6 @@ export class Cart extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Comp Did Mount - this.props.user.id', this.props.user.id)
-    const userIdNum = this.props.user.id
-    this.props.fetchCurrentOrder(userIdNum)
-  }
-  render() {
-    // const cart = this.props.product || []
-    // const user = this.state.user || {}
     // console.log('RENDER - cart', cart)
     // console.log('RENDER-- USER', user)
     console.log('P A R A M S', this.params)

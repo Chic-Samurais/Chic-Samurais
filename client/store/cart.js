@@ -12,11 +12,7 @@ const CHECKOUT = 'CHECKOUT'
 //ACTION TYPES
 const getCurrentOrder = userId => ({
   type: GET_CURRENT_ORDER,
-  user
-})
-const increaseQty = productId => ({
-  type: INCREASE_QTY,
-  productId
+  type: INCREASE_QTY
 })
 const decreaseQty = productId => ({
   type: DECREASE_QTY,
