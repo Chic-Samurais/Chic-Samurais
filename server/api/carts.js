@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {User, Order, Product, OrderProduct, Cart} = require('../db/models')
+const {Op} = require('sequelize')
 module.exports = router
 
 //GETORDERTOTAL HELPER FUNCTION
@@ -220,11 +221,19 @@ router.get('/checkout', async (req, res, next) => {
       res.json(userCart)
     } else {
       //this will take the guest cart and make an order
-      const guestOrder = new Order({isComplete: true})
+      const guestOrder = await Order.create({isComplete: true})
       guestOrder.orderTotal = req.session.cart.totalPrice
-      guestOrder.addProducts(req.session.cart.generateArray())
       guestOrder.save()
-      console.log(guestOrder)
+      const productsIdArray = Object.keys(req.session.cart.items).map((key) =>
+        Number(key)
+      )
+      productsIdArray.forEach(async (id) => {
+        const orderProduct = await guestOrder.addProduct(
+          await Product.findByPk(id)
+        )
+        orderProduct.quantity = req.session.cart.items[id].qty
+        orderProduct.save()
+      })
       res.json(guestOrder)
     }
   } catch (err) {
