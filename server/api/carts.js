@@ -19,9 +19,9 @@ router.get('/', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       // console.log(
       //   'created?',
@@ -49,7 +49,7 @@ router.delete('/', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const emptied = await userCart.removeProducts(
         await userCart.getProducts()
@@ -59,9 +59,9 @@ router.delete('/', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       //may not be necessary, but recalculating the orderTotal with helper fxn to make sure that functionality of emptying cart is working properly
       emptiedCart.orderTotal = getOrderTotal(emptiedCart.products)
@@ -86,25 +86,25 @@ router.post('/:productId', async (req, res, next) => {
     const product = await Product.findByPk(req.params.productId)
     if (req.user) {
       const [userCart, created] = await Order.findOrCreate({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const orderProduct = await OrderProduct.findOne({
-        where: {orderId: userCart.id, productId: req.params.productId}
+        where: {orderId: userCart.id, productId: req.params.productId},
       })
       if (!orderProduct) {
         await userCart.addProduct(product)
       } else {
         await orderProduct.update({
-          quantity: orderProduct.quantity + 1
+          quantity: orderProduct.quantity + 1,
         })
       }
       const updatedCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
       updatedCart.save()
@@ -127,7 +127,7 @@ router.delete('/:productId', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const product = await Product.findByPk(req.params.productId)
       const promise = await userCart.removeProduct(product)
@@ -136,9 +136,9 @@ router.delete('/:productId', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       console.log(
         'this product was removed:',
@@ -166,16 +166,16 @@ router.put('/:productId/decrement', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const orderProduct = await OrderProduct.findOne({
-        where: {orderId: userCart.id, productId: req.params.productId}
+        where: {orderId: userCart.id, productId: req.params.productId},
       })
 
       // check that the quantity is greater than 1, otherwise detroy the orderProduct association. Do we want this from a UX perspective?
       if (orderProduct.quantity > 1) {
         await orderProduct.update({
-          quantity: orderProduct.quantity - 1
+          quantity: orderProduct.quantity - 1,
         })
       } else {
         orderProduct.destroy() //or use magic method
@@ -183,7 +183,7 @@ router.put('/:productId/decrement', async (req, res, next) => {
 
       const updatedCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
-        include: [{model: Product}]
+        include: [{model: Product}],
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
       updatedCart.save()
@@ -210,9 +210,9 @@ router.put('/checkout', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       // console.log(
       //   'created?',
