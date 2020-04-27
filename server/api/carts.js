@@ -220,6 +220,7 @@ router.put('/checkout', async (req, res, next) => {
       userCart.save()
       res.json(userCart)
     } else {
+      //this will take the guest cart and make an order
       const cart = new Cart(req.session.cart ? req.session.cart : {})
       req.session.cart = cart
       res.json(cart)
