@@ -19,10 +19,4 @@ const Order = db.define('order', {
   }
 })
 
-Order.prototype.getOrderTotal = function() {
-  return this.products.reduce((total, product) => {
-    total += product.price * product.orderProduct.quantity
-  }, 0)
-}
-
 module.exports = Order
