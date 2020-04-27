@@ -9,6 +9,7 @@ function getOrderTotal(products) {
     return total
   }, 0)
 }
+
 // on /cart
 //"VIEW CART" FOR LOGGED IN USERS OR GUESTS
 router.get('/', async (req, res, next) => {
@@ -22,15 +23,16 @@ router.get('/', async (req, res, next) => {
           }
         ]
       })
-      console.log(
-        'created?',
-        created,
-        'order.id',
-        userCart.id,
-        'how many products',
-        userCart.products.length
-      )
+      // console.log(
+      //   'created?',
+      //   created,
+      //   'order.id',
+      //   userCart.id,
+      //   'how many products',
+      //   userCart.products.length
+      // )
       userCart.orderTotal = getOrderTotal(userCart.products)
+      userCart.save()
       res.json(userCart)
     } else {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
@@ -63,6 +65,7 @@ router.delete('/', async (req, res, next) => {
       })
       //may not be necessary, but recalculating the orderTotal with helper fxn to make sure that functionality of emptying cart is working properly
       emptiedCart.orderTotal = getOrderTotal(emptiedCart.products)
+      emptiedCart.save()
       res.json(emptiedCart)
     } else if (!req.session.cart) {
       res.send('Your cart is empty')
@@ -104,6 +107,7 @@ router.post('/:productId', async (req, res, next) => {
         ]
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.save()
       res.json(updatedCart)
     } else {
       //guest - for this do a method to extrapolate product data and push to items array
@@ -143,6 +147,7 @@ router.delete('/:productId', async (req, res, next) => {
         req.user.id
       )
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.save()
       res.json(updatedCart)
     } else {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
@@ -181,6 +186,7 @@ router.put('/:productId/decrement', async (req, res, next) => {
         include: [{model: Product}]
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.save()
       res.json(updatedCart)
     } else if (req.session.cart.items[req.params.productId]) {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
@@ -200,7 +206,7 @@ router.put('/:productId/decrement', async (req, res, next) => {
 router.put('/checkout', async (req, res, next) => {
   try {
     if (req.user) {
-      const [userCart, created] = await Order.findOne({
+      const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
@@ -208,14 +214,14 @@ router.put('/checkout', async (req, res, next) => {
           }
         ]
       })
-      console.log(
-        'created?',
-        created,
-        'order.id',
-        userCart.id,
-        'how many products',
-        userCart.products.length
-      )
+      // console.log(
+      //   'created?',
+      //   created,
+      //   'order.id',
+      //   userCart.id,
+      //   'how many products',
+      //   userCart.products.length
+      // )
       userCart.isComplete = true
       userCart.save()
       res.json(userCart)
