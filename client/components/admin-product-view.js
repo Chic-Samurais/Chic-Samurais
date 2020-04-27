@@ -13,8 +13,6 @@ export class AdminProducts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-    // this.handleChange = this.handleChange.bind(this)
-    // this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
   }
