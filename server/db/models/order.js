@@ -5,18 +5,21 @@ const db = require('../db')
 const Order = db.define('order', {
   isComplete: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   },
   orderTotal: {
     type: Sequelize.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
+    set(value) {
+      this.setDataValue('orderTotal', value / 100)
+    },
   },
   name: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   address: {
-    type: Sequelize.STRING
-  }
+    type: Sequelize.STRING,
+  },
 })
 
 module.exports = Order

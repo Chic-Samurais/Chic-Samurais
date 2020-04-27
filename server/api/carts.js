@@ -165,6 +165,7 @@ router.delete('/:productId', async (req, res, next) => {
 router.put('/:productId/decrement', async (req, res, next) => {
   try {
     if (req.user) {
+      //refactor to include aliased table - Noelle to link in team channel
       const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
       })
@@ -203,7 +204,7 @@ router.put('/:productId/decrement', async (req, res, next) => {
 
 //checking out
 ///put or post route?
-router.put('/checkout', async (req, res, next) => {
+router.get('/checkout', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
@@ -214,22 +215,17 @@ router.put('/checkout', async (req, res, next) => {
           },
         ],
       })
-      // console.log(
-      //   'created?',
-      //   created,
-      //   'order.id',
-      //   userCart.id,
-      //   'how many products',
-      //   userCart.products.length
-      // )
       userCart.isComplete = true
       userCart.save()
       res.json(userCart)
     } else {
       //this will take the guest cart and make an order
-      const cart = new Cart(req.session.cart ? req.session.cart : {})
-      req.session.cart = cart
-      res.json(cart)
+      const guestOrder = new Order({isComplete: true})
+      guestOrder.orderTotal = req.session.cart.totalPrice
+      guestOrder.addProducts(req.session.cart.generateArray())
+      guestOrder.save()
+      console.log(guestOrder)
+      res.json(guestOrder)
     }
   } catch (err) {
     next(err)
