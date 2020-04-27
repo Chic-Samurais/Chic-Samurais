@@ -9,20 +9,36 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({
-      // isAdmin: true,
+      isAdmin: true,
       // firstName: 'Jane',
       // lastName: 'Doe',
       email: 'email@email.com',
-      password: '1234567'
+      password: '1234'
       // address: '123 Main Street'
     }),
     User.create({
       // isAdmin: true,
       // firstName: 'John',
       // lastName: 'Smith',
-      email: 'email1@email1.com',
-      password: '1234567'
+      email: 'email1@email.com',
+      password: '1234'
       // address: '234 Main Street'
+    }),
+    User.create({
+      email: 'email2@email.com',
+      password: '1234'
+    }),
+    User.create({
+      email: 'email3@email.com',
+      password: '1234'
+    }),
+    User.create({
+      email: 'email4@email.com',
+      password: '1234'
+    }),
+    User.create({
+      email: 'email5@email.com',
+      password: '1234'
     })
   ])
 
@@ -33,6 +49,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1200px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'
     }),
@@ -42,6 +59,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://www.vincentvangogh.org/images/paintings/the-night-cafe.jpg'
     }),
@@ -51,6 +69,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl: 'https://media.getty.edu/museum/images/web/enlarge/00094701.jpg'
     }),
     Product.create({
@@ -59,6 +78,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl: 'https://www.vangoghgallery.com/painting/img/bedroom_full.jpeg'
     }),
     Product.create({
@@ -67,6 +87,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://i0.wp.com/www.guggenheim.org/wp-content/uploads/2014/01/CMW_MotherDaughter_1024.jpg?w=870&zoom=2'
     }),
@@ -76,6 +97,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://uploads4.wikiart.org/images/helen-frankenthaler/interior-landscape-1964.jpg'
     }),
@@ -85,6 +107,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://uploads2.wikiart.org/images/helen-frankenthaler/saturn-revisited-1964.jpg'
     }),
@@ -94,6 +117,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://uploads7.wikiart.org/images/helen-frankenthaler/what-red-lines-can-do-1970.jpg'
     }),
@@ -103,6 +127,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://uploads5.wikiart.org/images/helen-frankenthaler/dream-walk-1977.jpg'
     }),
@@ -112,6 +137,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://d1lfxha3ugu3d4.cloudfront.net/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_Sig-Image_EL110_428W.jpg'
     }),
@@ -121,6 +147,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.060_Interior-Two-Chairs-and-Fireplace_428H.jpg'
     }),
@@ -130,6 +157,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.066_Qusuquzah-Une-Tres-Belle-Negresse-2_428H.jpg'
     }),
@@ -139,6 +167,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.059_Interior.-Green-and-White-Couch_428H.jpg'
     }),
@@ -148,6 +177,7 @@ async function seed() {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta mi et purus aliquet molestie. Aenean sed varius orci. Donec blandit efficitur nulla varius suscipit. Aliquam non sapien eu ante iaculis maximus pharetra non nisi.',
       price: 7500,
+      quantity: 50,
       imageUrl:
         'https://www.brooklynmuseum.org/assets/system-images/remote/https_d1lfxha3ugu3d4.cloudfront.net/exhibitions/images/2012_Mickalene_Thomas_EL110.063_Landscape-With-Tree_428H.jpg'
     })
