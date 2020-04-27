@@ -9,7 +9,7 @@ function getOrderTotal(products) {
     return total
   }, 0)
 }
-
+// on /cart
 //"VIEW CART" FOR LOGGED IN USERS OR GUESTS
 router.get('/', async (req, res, next) => {
   try {
@@ -189,6 +189,40 @@ router.put('/:productId/decrement', async (req, res, next) => {
       res.json(cart)
     } else {
       res.send('this item is not in your cart')
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+//checking out
+///put or post route?
+router.put('/checkout', async (req, res, next) => {
+  try {
+    if (req.user) {
+      const [userCart, created] = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false},
+        include: [
+          {
+            model: Product
+          }
+        ]
+      })
+      console.log(
+        'created?',
+        created,
+        'order.id',
+        userCart.id,
+        'how many products',
+        userCart.products.length
+      )
+      userCart.isComplete = true
+      userCart.save()
+      res.json(userCart)
+    } else {
+      const cart = new Cart(req.session.cart ? req.session.cart : {})
+      req.session.cart = cart
+      res.json(cart)
     }
   } catch (err) {
     next(err)

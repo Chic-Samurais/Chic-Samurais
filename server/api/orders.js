@@ -2,15 +2,15 @@ const router = require('express').Router()
 const {Order, User, Product, OrderProduct} = require('../db/models')
 module.exports = router
 
-//ORIGINAL EQUATION TO DETERMINE ORDER TOTAL IN CART - firgure out where and when to calculate
-// if (!order.isComplete) {
-//   order.total =
-//     order.products
-//       .map((product) => product.price * product.orderProduct.quantity)
-//       .reduce((curr, subtotal) => {
-//         return curr + subtotal
-//       }, 0) / 100
-// }
+//GETORDERTOTAL HELPER FUNCTION
+//this may be unnecessary?
+//admin may not need to see a unfinished order total
+function getOrderTotal(products) {
+  return products.reduce((total, product) => {
+    total += product.price * product.orderProduct.quantity
+    return total
+  }, 0)
+}
 
 router.get('/', async (req, res, next) => {
   try {
