@@ -50,7 +50,6 @@ export class Cart extends React.Component {
               type="button"
               onClick={() => {
                 this.props.deleteProd(product)
-                // .setState(this.props.fetchCurrentOrder())
               }}
             >
               Remove
@@ -69,8 +68,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => ({
   fetchCurrentOrder: () => dispatch(fetchCurrentOrder()),
-  increaseQuant: productId => dispatch(increaseQuant(productId)),
-  decreaseQuant: productId => dispatch(decreaseQuant(productId)),
-  deleteProd: productId => dispatch(deleteProd(productId))
+  increaseQuant: product => dispatch(increaseQuant(product)),
+  decreaseQuant: product => dispatch(decreaseQuant(product)),
+  deleteProd: product => dispatch(deleteProd(product))
 })
 export default connect(mapState, mapDispatch)(Cart)

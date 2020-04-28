@@ -44,7 +44,7 @@ export const fetchCurrentOrder = () => async dispatch => {
   try {
     const {data} = await axios.get(`/api/cart`)
     dispatch(getCurrentOrder(Object.values(data.items)));
-    console.log('>>>>>>>data: ', data)
+    // console.log('>>>>>>>data: ', data)
   } catch (err) {
     console.error(err)
   }
@@ -54,6 +54,7 @@ export const increaseQuant = product => async dispatch => {
   try {
     const {data} = await axios.put(`/api/cart/${productId}`)
     dispatch(increaseQty(data))
+        console.log('>>>>>>>data: ', data)
   } catch (err) {
     console.error(err)
   }

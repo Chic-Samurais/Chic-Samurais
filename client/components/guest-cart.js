@@ -34,7 +34,7 @@ export class GuestCart extends React.Component {
               className="prodThumb"
             />
             <h3>{product.title}</h3>
-            <p>Price: ${product.price / 100}</p>
+            <p>Subtotal: ${product.price / 100}</p>
             <p>Qty: {product.qty}</p>
             <button
               type="button"
