@@ -31,6 +31,7 @@ router.post('/', async (req, res, next) => {
         totalQty: req.session.cart.totalQty,
       })
 
+      // refactor with "generateArray method on cart? Is that a better big O?"
       const guestCartItems = req.session.cart.items
       for (let id in guestCartItems) {
         if (guestCartItems.hasOwnProperty(id)) {
@@ -49,6 +50,7 @@ router.post('/', async (req, res, next) => {
           await orderProduct.save()
         }
       }
+
       const dbGuestOrder = await Order.findByPk(guestOrder.id, {
         include: [{model: Product}],
       })
