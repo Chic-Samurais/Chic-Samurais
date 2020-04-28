@@ -25,6 +25,11 @@ router.post('/', async (req, res, next) => {
       }
     } else {
       //this will take the guest cart and make an order
+      if (!req.session.cart.totalQty) {
+        res.send(
+          'Your cart is empty! Add items to your cart before checking out!'
+        )
+      }
       const guestOrder = await Order.create({
         isComplete: true,
         orderTotal: req.session.cart.totalPrice, //update to match guest cart?
@@ -55,14 +60,9 @@ router.post('/', async (req, res, next) => {
         include: [{model: Product}],
       })
       //REDIRECT OR MESSAGE HERE?
-      if (dbGuestOrder.totalQty) {
-        req.session.cart = new Cart({})
-        res.json(dbGuestOrder)
-      } else {
-        res.send(
-          'Your cart is empty! Add items to your cart before checking out!'
-        )
-      }
+
+      req.session.cart = new Cart({})
+      res.json(dbGuestOrder)
     }
   } catch (err) {
     next(err)
