@@ -16,10 +16,6 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             Logout
           </a>
           <Link to="/products">Products</Link>
-<<<<<<< HEAD
-=======
-          <Link to="/admin/products">Admin</Link>
->>>>>>> master
           <Link to="/cart">Cart</Link>
         </div>
       ) : (
@@ -28,11 +24,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           <Link to="/login">Login</Link>
           <Link to="/signup">Sign Up</Link>
           <Link to="/products">Products</Link>
-<<<<<<< HEAD
           <Link to="/guestCart">Cart</Link>
-=======
-          <Link to="/cart">Cart</Link>
->>>>>>> master
         </div>
       )}
     </nav>
@@ -43,17 +35,17 @@ const Navbar = ({handleClick, isLoggedIn}) => (
 /**
  * CONTAINER
  */
-const mapState = (state) => {
+const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id,
+    isLoggedIn: !!state.user.id
   }
 }
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout())
-    },
+    }
   }
 }
 
@@ -64,6 +56,6 @@ export default connect(mapState, mapDispatch)(Navbar)
  */
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired
   // isAdmin: PropTypes.bool.isRequired
 }

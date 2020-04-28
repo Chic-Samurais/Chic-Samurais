@@ -10,26 +10,26 @@ const DELETE_ITEM = 'DELETE_ITEM'
 const CHECKOUT = 'CHECKOUT'
 
 //ACTION TYPES
-const getCurrentOrder = (products) => ({
+const getCurrentOrder = products => ({
   type: GET_CURRENT_ORDER,
-  products,
+  products
 })
-const decreaseQty = (products) => ({
+const decreaseQty = products => ({
   type: DECREASE_QTY,
-  products,
+  products
 })
 
-const increaseQty = (products) => ({
+const increaseQty = products => ({
   type: INCREASE_QTY,
-  products,
+  products
 })
-const deleteItem = (products) => ({
+const deleteItem = products => ({
   type: DELETE_ITEM,
-  products,
+  products
 })
-const checkout = (userId) => ({
+const checkout = userId => ({
   type: CHECKOUT,
-  userId,
+  userId
 })
 
 //INITIAL STATE
@@ -37,12 +37,12 @@ const checkout = (userId) => ({
 const initialState = {
   cart: [],
   user: {},
-  singleProduct: {},
+  singleProduct: {}
 }
 
 //THUNKS
 
-export const fetchCurrentOrder = () => async (dispatch) => {
+export const fetchCurrentOrder = () => async dispatch => {
   try {
     const {data} = await axios.get(`/api/cart`)
     dispatch(getCurrentOrder(data.products))
@@ -51,20 +51,16 @@ export const fetchCurrentOrder = () => async (dispatch) => {
     console.error(err)
   }
 }
-export const increaseQuant = (product) => async (dispatch) => {
+export const increaseQuant = product => async dispatch => {
   const productId = product.id
   try {
     const {data} = await axios.put(`/api/cart/${productId}`)
-<<<<<<< HEAD
-    dispatch(increaseQty(data))
-=======
     dispatch(increaseQty(data.products))
->>>>>>> master
   } catch (err) {
     console.error(err)
   }
 }
-export const decreaseQuant = (product) => async (dispatch) => {
+export const decreaseQuant = product => async dispatch => {
   const productId = product.id
   try {
     const {data} = await axios.put(`/api/cart/${productId}/decrement`)
@@ -73,7 +69,7 @@ export const decreaseQuant = (product) => async (dispatch) => {
     console.error(err)
   }
 }
-export const deleteProd = (product) => async (dispatch) => {
+export const deleteProd = product => async dispatch => {
   try {
     const productId = product.id
     const {data} = await axios.delete(`/api/cart/${productId}`)
@@ -82,7 +78,7 @@ export const deleteProd = (product) => async (dispatch) => {
     console.error(err)
   }
 }
-export const checkoutCart = () => async (dispatch) => {
+export const checkoutCart = () => async dispatch => {
   try {
     const {data} = await axios.put(`/api/cart/checkout`)
     dispatch(checkout(data))

@@ -53,7 +53,7 @@ export const increaseQuant = product => async dispatch => {
   const productId = product.id
   try {
     const {data} = await axios.put(`/api/cart/${productId}`)
-    dispatch(increaseQty(data))
+    dispatch(increaseQty(data.item))
     console.log('>>>>>>>data: ', data)
   } catch (err) {
     console.error(err)
