@@ -189,6 +189,12 @@ async function seed() {
     }),
     Order.create({
       userId: 2
+    }),
+    Order.create({
+      userId: 3
+    }),
+    Order.create({
+      userId: 4
     })
   ])
 
@@ -201,6 +207,46 @@ async function seed() {
     OrderProduct.create({
       orderId: 2,
       productId: 5,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 2,
+      productId: 4,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 3,
+      productId: 5,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 3,
+      productId: 8,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 3,
+      productId: 2,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 4,
+      productId: 13,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 4,
+      productId: 3,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 4,
+      productId: 7,
+      price: 6500
+    }),
+    OrderProduct.create({
+      orderId: 4,
+      productId: 2,
       price: 6500
     })
   ])

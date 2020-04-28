@@ -3,7 +3,7 @@ const {Order, User, Product, OrderProduct} = require('../db/models')
 module.exports = router
 
 //GETORDERTOTAL HELPER FUNCTION
-//this may be unnecessary?
+//this may be unnecessary here?
 //admin may not need to see a unfinished order total
 function getOrderTotal(products) {
   return products.reduce((total, product) => {
@@ -19,9 +19,9 @@ router.get('/', async (req, res, next) => {
         include: [
           {
             model: User,
-            attributes: ['id', 'email']
-          }
-        ]
+            attributes: ['id', 'email'],
+          },
+        ],
       })
       res.json(orders)
     } else {
@@ -38,12 +38,12 @@ router.get('/:orderId', async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ['id', 'email']
+          attributes: ['id', 'email'],
         },
         {
-          model: Product
-        }
-      ]
+          model: Product,
+        },
+      ],
     })
     if (req.user && (req.user.id === order.userId || req.user.isAdmin)) {
       res.json(order)
@@ -95,7 +95,7 @@ router.delete('/:orderId', async (req, res, next) => {
 router.get('/:orderId/:productId', async (req, res, next) => {
   try {
     const orderProduct = await OrderProduct.findOne({
-      where: {orderId: req.params.orderId, productId: req.params.productId}
+      where: {orderId: req.params.orderId, productId: req.params.productId},
     })
     res.json(orderProduct) // what do we want sent? possibility of redirect?
   } catch (err) {
@@ -106,7 +106,7 @@ router.get('/:orderId/:productId', async (req, res, next) => {
 router.put('/:orderId/:productId', async (req, res, next) => {
   try {
     const orderProduct = await OrderProduct.findOne({
-      where: {orderId: req.params.orderId, productId: req.params.productId}
+      where: {orderId: req.params.orderId, productId: req.params.productId},
     })
     const updated = await orderProduct.update(req.body) // hide/destructure somehow?
     res.json(updated) // what do we want sent? possibility of redirect?
@@ -118,7 +118,7 @@ router.put('/:orderId/:productId', async (req, res, next) => {
 router.delete('/:orderId/:productId', async (req, res, next) => {
   try {
     const orderProduct = await OrderProduct.findOne({
-      where: {orderId: req.params.orderId, productId: req.params.productId}
+      where: {orderId: req.params.orderId, productId: req.params.productId},
     })
     await orderProduct.destroy()
     res.sendStatus(204)

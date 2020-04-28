@@ -1,8 +1,8 @@
 const router = require('express').Router()
-const {User, Order, Product, OrderProduct, Cart} = require('../db/models')
+const {Order, Product, OrderProduct, Cart} = require('../db/models')
 module.exports = router
 
-//GETORDERTOTAL HELPER FUNCTION
+//GETORDERTOTAL AND GETTOTALQTY HELPER FUNCTIONS
 function getOrderTotal(products) {
   return products.reduce((total, product) => {
     total += product.price * product.orderProduct.quantity
@@ -10,7 +10,13 @@ function getOrderTotal(products) {
   }, 0)
 }
 
-// on /cart
+function getTotalQty(products) {
+  return products.reduce((total, product) => {
+    total += product.orderProduct.quantity
+    return total
+  }, 0)
+}
+
 //"VIEW CART" FOR LOGGED IN USERS OR GUESTS
 router.get('/', async (req, res, next) => {
   try {
@@ -23,15 +29,8 @@ router.get('/', async (req, res, next) => {
           },
         ],
       })
-      // console.log(
-      //   'created?',
-      //   created,
-      //   'order.id',
-      //   userCart.id,
-      //   'how many products',
-      //   userCart.products.length
-      // )
       userCart.orderTotal = getOrderTotal(userCart.products)
+      userCart.totalQty = getTotalQty(userCart.products)
       userCart.save()
       res.json(userCart)
     } else {
@@ -65,6 +64,7 @@ router.delete('/', async (req, res, next) => {
       })
       //may not be necessary, but recalculating the orderTotal with helper fxn to make sure that functionality of emptying cart is working properly
       emptiedCart.orderTotal = getOrderTotal(emptiedCart.products)
+      emptiedCart.totalQty = getTotalQty(userCart.products)
       emptiedCart.save()
       res.json(emptiedCart)
     } else if (!req.session.cart) {
@@ -81,7 +81,7 @@ router.delete('/', async (req, res, next) => {
 })
 
 //ADDING/POSTING A NEW, UNIQUE ITEM TO A CART Or increments existing item
-router.post('/:productId', async (req, res, next) => {
+router.put('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.productId)
     if (req.user) {
@@ -107,6 +107,7 @@ router.post('/:productId', async (req, res, next) => {
         ],
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
       res.json(updatedCart)
     } else {
@@ -147,6 +148,7 @@ router.delete('/:productId', async (req, res, next) => {
         req.user.id
       )
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
       res.json(updatedCart)
     } else {
@@ -160,11 +162,11 @@ router.delete('/:productId', async (req, res, next) => {
   }
 })
 
-//cart/:productid/decrement -- remove one instance of the item
-//if only once instance is in cart, deletes item
+//removes qty of item by 1, or "desroys" assoc if only 1 in cart
 router.put('/:productId/decrement', async (req, res, next) => {
   try {
     if (req.user) {
+      //refactor to include aliased table - Noelle to link in team channel
       const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
       })
@@ -172,7 +174,6 @@ router.put('/:productId/decrement', async (req, res, next) => {
         where: {orderId: userCart.id, productId: req.params.productId},
       })
 
-      // check that the quantity is greater than 1, otherwise detroy the orderProduct association. Do we want this from a UX perspective?
       if (orderProduct.quantity > 1) {
         await orderProduct.update({
           quantity: orderProduct.quantity - 1,
@@ -186,6 +187,7 @@ router.put('/:productId/decrement', async (req, res, next) => {
         include: [{model: Product}],
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
       res.json(updatedCart)
     } else if (req.session.cart.items[req.params.productId]) {
@@ -195,41 +197,6 @@ router.put('/:productId/decrement', async (req, res, next) => {
       res.json(cart)
     } else {
       res.send('this item is not in your cart')
-    }
-  } catch (err) {
-    next(err)
-  }
-})
-
-//checking out
-///put or post route?
-router.put('/checkout', async (req, res, next) => {
-  try {
-    if (req.user) {
-      const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product,
-          },
-        ],
-      })
-      // console.log(
-      //   'created?',
-      //   created,
-      //   'order.id',
-      //   userCart.id,
-      //   'how many products',
-      //   userCart.products.length
-      // )
-      userCart.isComplete = true
-      userCart.save()
-      res.json(userCart)
-    } else {
-      //this will take the guest cart and make an order
-      const cart = new Cart(req.session.cart ? req.session.cart : {})
-      req.session.cart = cart
-      res.json(cart)
     }
   } catch (err) {
     next(err)
