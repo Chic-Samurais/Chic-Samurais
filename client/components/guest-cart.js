@@ -19,7 +19,7 @@ export class GuestCart extends React.Component {
   }
 
   render() {
-    console.log('>>>>>>props: ', this.props);
+    console.log('>>>>>>props: ', this.props)
     const cart = this.props.cart || []
     console.log('>>>>>>>>>this.props.cart: ', this.props.cart)
     return (
@@ -59,7 +59,7 @@ export class GuestCart extends React.Component {
             </button>
           </div>
         ))}
-       </div>
+      </div>
     )
   }
 }
