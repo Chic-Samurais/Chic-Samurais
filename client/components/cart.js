@@ -5,7 +5,7 @@ import {
   fetchCurrentOrder,
   increaseQuant,
   decreaseQuant,
-  deleteProd
+  deleteProd,
 } from '../store/cart'
 
 export class Cart extends React.Component {
@@ -23,7 +23,7 @@ export class Cart extends React.Component {
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {cart.map(product => (
+        {cart.map((product) => (
           <div key={product.id}>
             <img
               src={product.imageUrl}
@@ -50,7 +50,6 @@ export class Cart extends React.Component {
               type="button"
               onClick={() => {
                 this.props.deleteProd(product)
-                // .setState(this.props.fetchCurrentOrder())
               }}
             >
               Remove
@@ -63,14 +62,14 @@ export class Cart extends React.Component {
 }
 
 //Insert name and address form for checkout
-const mapState = state => {
+const mapState = (state) => {
   return {cart: state.cart.cart}
 }
 
-const mapDispatch = dispatch => ({
+const mapDispatch = (dispatch) => ({
   fetchCurrentOrder: () => dispatch(fetchCurrentOrder()),
-  increaseQuant: productId => dispatch(increaseQuant(productId)),
-  decreaseQuant: productId => dispatch(decreaseQuant(productId)),
-  deleteProd: productId => dispatch(deleteProd(productId))
+  increaseQuant: (productId) => dispatch(increaseQuant(productId)),
+  decreaseQuant: (productId) => dispatch(decreaseQuant(productId)),
+  deleteProd: (productId) => dispatch(deleteProd(productId)),
 })
 export default connect(mapState, mapDispatch)(Cart)

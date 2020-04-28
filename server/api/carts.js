@@ -81,7 +81,7 @@ router.delete('/', async (req, res, next) => {
 })
 
 //ADDING/POSTING A NEW, UNIQUE ITEM TO A CART Or increments existing item
-router.post('/:productId', async (req, res, next) => {
+router.put('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.productId)
     if (req.user) {
