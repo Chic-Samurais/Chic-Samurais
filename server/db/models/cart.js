@@ -41,7 +41,7 @@ module.exports = class Cart {
     this.totalPrice = 0
   }
 
-  // generateArray() {
-  //   return Object.values(this.items)
-  // }
+  generateArray() {
+    return Object.values(this.items)
+  }
 }

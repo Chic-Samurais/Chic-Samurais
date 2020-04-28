@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
 
-const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
+const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
     <h1>Artsy Posters</h1>
     <nav>
@@ -16,7 +16,6 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
             Logout
           </a>
           <Link to="/products">Products</Link>
-          <Link to="/admin/products">Admin</Link>
           <Link to="/cart">Cart</Link>
         </div>
       ) : (
@@ -25,7 +24,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
           <Link to="/login">Login</Link>
           <Link to="/signup">Sign Up</Link>
           <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
+          <Link to="/guestCart">Cart</Link>
         </div>
       )}
     </nav>
@@ -36,17 +35,17 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
 /**
  * CONTAINER
  */
-const mapState = (state) => {
+const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id,
+    isLoggedIn: !!state.user.id
   }
 }
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout())
-    },
+    }
   }
 }
 
@@ -57,6 +56,6 @@ export default connect(mapState, mapDispatch)(Navbar)
  */
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired
   // isAdmin: PropTypes.bool.isRequired
 }
