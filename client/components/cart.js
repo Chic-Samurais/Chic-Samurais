@@ -7,6 +7,7 @@ import {
   decreaseQuant,
   deleteProd
 } from '../store/cart'
+import Checkout from './checkout'
 
 export class Cart extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ export class Cart extends React.Component {
             </button>
           </div>
         ))}
+        <Checkout />
       </div>
     )
   }

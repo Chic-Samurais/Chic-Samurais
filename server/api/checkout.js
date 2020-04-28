@@ -2,16 +2,16 @@ const router = require('express').Router()
 const {Order, Product, Cart} = require('../db/models')
 module.exports = router
 
-router.post('/', async (req, res, next) => {
+router.put('/', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product,
-          },
-        ],
+            model: Product
+          }
+        ]
       })
 
       if (userCart.totalQty) {
@@ -33,7 +33,7 @@ router.post('/', async (req, res, next) => {
       const guestOrder = await Order.create({
         isComplete: true,
         orderTotal: req.session.cart.totalPrice, //update to match guest cart?
-        totalQty: req.session.cart.totalQty,
+        totalQty: req.session.cart.totalQty
       })
 
       // refactor with "generateArray method on cart? Is that a better big O?"
@@ -57,7 +57,7 @@ router.post('/', async (req, res, next) => {
       }
 
       const dbGuestOrder = await Order.findByPk(guestOrder.id, {
-        include: [{model: Product}],
+        include: [{model: Product}]
       })
       //REDIRECT OR MESSAGE HERE?
 
