@@ -224,16 +224,24 @@ router.get('/checkout', async (req, res, next) => {
       const guestOrder = await Order.create({isComplete: true})
       guestOrder.orderTotal = req.session.cart.totalPrice
       guestOrder.save()
-
+      console.log('cart is: ', req.session.cart)
       const productsIdArray = Object.keys(req.session.cart.items).map(key =>
         Number(key)
       )
+      console.log('array of product ids: ', productsIdArray)
+      // console.log('cart: ', req.session.cart)
       productsIdArray.forEach(async id => {
-        const orderProduct = await guestOrder.addProduct(
-          await Product.findByPk(id)
+        let product = await Product.findByPk(id)
+        let [orderProduct] = await guestOrder.addProduct(
+          product
+          // await Product.findByPk(id)
         )
-        orderProduct.quantity = req.session.cart.items[id].qty
+        console.log('cart: ', req.session.cart.items[id])
+          // const stringId = String(id)
+        orderProduct.quantity = req.session.cart.items[`${id}`].qty
+          console.log(orderProduct.quantity)
         orderProduct.save()
+
       })
 
       req.session.cart = new Cart({})
