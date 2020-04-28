@@ -49,9 +49,8 @@ export class Cart extends React.Component {
             <button
               type="button"
               onClick={() => {
-                this.props
-                  .deleteProd(product)
-                  .setState(this.props.fetchCurrentOrder())
+                this.props.deleteProd(product)
+                // .setState(this.props.fetchCurrentOrder())
               }}
             >
               Remove
