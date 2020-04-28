@@ -28,10 +28,7 @@ export class AllProducts extends React.Component {
               />
               <h3>{product.title}</h3>
               <h4>{product.artist}</h4>
-              <p>
-                ${product.price / 100}{' '}
-                <button type="submit">Add to Cart</button>{' '}
-              </p>
+              <p>${product.price / 100}</p>
             </Link>
           </div>
         ))}

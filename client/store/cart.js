@@ -10,12 +10,17 @@ const DELETE_ITEM = 'DELETE_ITEM'
 const CHECKOUT = 'CHECKOUT'
 
 //ACTION TYPES
-const getCurrentOrder = userId => ({
+const getCurrentOrder = items => ({
   type: GET_CURRENT_ORDER,
-  type: INCREASE_QTY
+  items
 })
 const decreaseQty = productId => ({
   type: DECREASE_QTY,
+  productId
+})
+
+const increaseQty = productId => ({
+  type: INCREASE_QTY,
   productId
 })
 const deleteItem = productId => ({
@@ -37,42 +42,44 @@ const initialState = {
 
 //THUNKS
 
-export const fetchCurrentOrder = userId => async dispatch => {
-  console.log('------userId: ', userId)
+export const fetchCurrentOrder = () => async dispatch => {
   try {
-    const {data} = await axios.get(`/api/users/${userId}/cart`)
-    dispatch(getCurrentOrder(data))
+    const {data} = await axios.get(`/api/cart`)
+    dispatch(getCurrentOrder(data.products))
+    console.log('>>>>>>>data: ', data)
   } catch (err) {
     console.error(err)
   }
 }
-export const increaseQuant = (productId, userId) => async dispatch => {
+export const increaseQuant = product => async dispatch => {
+  const productId = product.id
   try {
-    const {data} = await axios.put(`/api/users/${userId}/cart/${productId}`)
+    const {data} = await axios.post(`/api/cart/${productId}`)
     dispatch(increaseQty(data))
   } catch (err) {
     console.error(err)
   }
 }
-export const decreaseQuant = (productId, userId) => async dispatch => {
+export const decreaseQuant = product => async dispatch => {
+  const productId = product.id
   try {
-    const {data} = await axios.put(`/api/users/${userId}/cart/${productId}`)
+    const {data} = await axios.put(`/api/cart/${productId}/decrement`)
     dispatch(decreaseQty(data))
   } catch (err) {
     console.error(err)
   }
 }
-export const deleteProd = (productId, userId) => async dispatch => {
+export const deleteProd = productId => async dispatch => {
   try {
-    const {data} = await axios.delete(`/api/users/${userId}/cart/${productId}`)
-    dispatch(deleteItem(data))
+    await axios.delete(`/api/cart/${productId.id}`)
+    dispatch(deleteItem(productId))
   } catch (err) {
     console.error(err)
   }
 }
-export const checkoutCart = userId => async dispatch => {
+export const checkoutCart = () => async dispatch => {
   try {
-    const {data} = await axios.put(`/api/users/${userId}/cart`)
+    const {data} = await axios.put(`/api/cart/checkout`)
     dispatch(checkout(data))
   } catch (err) {
     console.error(err)
@@ -84,7 +91,7 @@ export const checkoutCart = userId => async dispatch => {
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case GET_CURRENT_ORDER:
-      return {...state, cart: action.id}
+      return {...state, cart: action.items}
 
     case INCREASE_QTY:
       return {...state, singleProduct: action.productId}

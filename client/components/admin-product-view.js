@@ -1,10 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {
-  fetchProducts,
-  deleteProduct,
-  postNewProduct
-} from '../store/product'
+import {fetchProducts, deleteProduct, postNewProduct} from '../store/product'
 import {Link} from 'react-router-dom'
 import AddProductForm from './add-product-form'
 
