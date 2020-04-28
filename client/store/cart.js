@@ -60,7 +60,8 @@ export const increaseQuant = product => async dispatch => {
     console.error(err)
   }
 }
-export const decreaseQuant = productId => async dispatch => {
+export const decreaseQuant = product => async dispatch => {
+  const productId = product.id
   try {
     const {data} = await axios.put(`/api/cart/${productId}/decrement`)
     dispatch(decreaseQty(data))
@@ -70,8 +71,8 @@ export const decreaseQuant = productId => async dispatch => {
 }
 export const deleteProd = productId => async dispatch => {
   try {
-    const {data} = await axios.delete(`/api/cart/${productId}`)
-    dispatch(deleteItem(data))
+    await axios.delete(`/api/cart/${productId.id}`)
+    dispatch(deleteItem(productId))
   } catch (err) {
     console.error(err)
   }

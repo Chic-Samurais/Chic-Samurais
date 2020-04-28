@@ -1,7 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchCurrentOrder} from '../store/cart'
+import {
+  fetchCurrentOrder,
+  increaseQuant,
+  decreaseQuant,
+  deleteProd
+} from '../store/cart'
 
 export class Cart extends React.Component {
   constructor(props) {
@@ -11,11 +16,10 @@ export class Cart extends React.Component {
 
   componentDidMount() {
     this.props.fetchCurrentOrder()
-    console.log('state is: ', this.state)
   }
+
   render() {
     const cart = this.props.cart || []
-    console.log('mad props yo', this.props)
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
@@ -30,6 +34,28 @@ export class Cart extends React.Component {
             <h3>{product.title}</h3>
             <p>Price: ${product.price / 100}</p>
             <p>Qty: {product.orderProduct.quantity}</p>
+            <button
+              type="button"
+              onClick={() => this.props.increaseQuant(product)}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => this.props.decreaseQuant(product)}
+            >
+              -
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                this.props
+                  .deleteProd(product)
+                  .setState(this.props.fetchCurrentOrder())
+              }}
+            >
+              Remove
+            </button>
           </div>
         ))}
       </div>
@@ -43,6 +69,9 @@ const mapState = state => {
 }
 
 const mapDispatch = dispatch => ({
-  fetchCurrentOrder: () => dispatch(fetchCurrentOrder())
+  fetchCurrentOrder: () => dispatch(fetchCurrentOrder()),
+  increaseQuant: productId => dispatch(increaseQuant(productId)),
+  decreaseQuant: productId => dispatch(decreaseQuant(productId)),
+  deleteProd: productId => dispatch(deleteProd(productId))
 })
 export default connect(mapState, mapDispatch)(Cart)
