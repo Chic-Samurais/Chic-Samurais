@@ -14,7 +14,8 @@ export const UserHome = (props) => {
     {isAdmin ? (
     <div>
       <h3>Welcome, {email}</h3>
-      <Link to="/admin/products">Admin</Link>
+      <Link to="/admin/products">Edit Products</Link>
+      <Link to="/admin/users">View Users</Link>
     </div>
     ) : (
       <div>
@@ -25,9 +26,6 @@ export const UserHome = (props) => {
   </div>
   )
 }
-
-
-
 
 /**
  * CONTAINER
