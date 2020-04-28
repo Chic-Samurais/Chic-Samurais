@@ -36,8 +36,6 @@ const checkout = userId => ({
 
 const initialState = {
   cart: [],
-  user: {},
-  singleProduct: {}
 }
 
 //THUNKS

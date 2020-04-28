@@ -35,7 +35,7 @@ const checkout = sessionId => ({
 //INITIAL STATE
 
 const initialState = {
-  cart: []
+  guestCart: {}
 }
 
 //THUNKS
@@ -43,8 +43,8 @@ const initialState = {
 export const fetchCurrentOrder = () => async dispatch => {
   try {
     const {data} = await axios.get(`/api/cart`)
-    dispatch(getCurrentOrder(Object.values(data.items)))
-    // console.log('>>>>>>>data: ', data)
+    dispatch(getCurrentOrder(data.items))
+    console.log('>>>>>>>data: ', data)
   } catch (err) {
     console.error(err)
   }
@@ -90,7 +90,7 @@ export const checkoutCart = () => async dispatch => {
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case GET_CURRENT_ORDER:
-      return {...state, cart: action.items}
+      return {...state, guestCart: action.items}
 
     case INCREASE_QTY:
       return {...state, singleProduct: action.productId}

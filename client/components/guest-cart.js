@@ -19,40 +19,40 @@ export class GuestCart extends React.Component {
   }
 
   render() {
-    console.log('>>>>>>props: ', this.props)
-    const cart = this.props.cart || []
-    console.log('>>>>>>>>>this.props.cart: ', this.props.cart)
+    console.log('>>>>>>>>>this.props.cart: ', this.props.guestCart)
+    const guestCartItems = this.props.guestCart || []
+    console.log(">>>>>>>>>guestCartItems: ", guestCartItems);
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {cart.map(product => (
-          <div key={product.item.id}>
-            {console.log(product.item.id)}
+        {Object.values(guestCartItems).map(item => (
+          <div key={item.id}>
+            {console.log(item.id)}
             <img
-              src={product.item.imageUrl}
+              src={item.imageUrl}
               height="100px"
               width=""
               className="prodThumb"
             />
-            <h3>{product.item.title}</h3>
-            <p>Subtotal: ${product.price / 100}</p>
-            <p>Qty: {product.qty}</p>
+            <h3>{item.title}</h3>
+            <p>Subtotal: ${item.price / 100}</p>
+            <p>Qty: {item.qty}</p>
             <button
               type="button"
-              onClick={() => this.props.increaseQuant(product)}
+              onClick={() => this.props.increaseQuant(item)}
             >
               +
             </button>
             <button
               type="button"
-              onClick={() => this.props.decreaseQuant(product)}
+              onClick={() => this.props.decreaseQuant(item)}
             >
               -
             </button>
             <button
               type="button"
               onClick={() => {
-                this.props.deleteProd(product)
+                this.props.deleteProd(item)
                 // .setState(this.props.fetchCurrentOrder())
               }}
             >
@@ -67,7 +67,7 @@ export class GuestCart extends React.Component {
 
 //Insert name and address form for checkout
 const mapState = state => {
-  return {cart: state.guestCart.cart}
+  return {cart: state.guestCart.guestCart}
 }
 
 const mapDispatch = dispatch => ({
