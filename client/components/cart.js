@@ -36,6 +36,8 @@ export class Cart extends React.Component {
     )
   }
 }
+
+//Insert name and address form for checkout
 const mapState = state => {
   return {cart: state.cart.cart}
 }
