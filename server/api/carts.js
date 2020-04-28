@@ -1,9 +1,8 @@
 const router = require('express').Router()
-const {User, Order, Product, OrderProduct, Cart} = require('../db/models')
-const {Op} = require('sequelize')
+const {Order, Product, OrderProduct, Cart} = require('../db/models')
 module.exports = router
 
-//GETORDERTOTAL HELPER FUNCTION
+//GETORDERTOTAL AND GETTOTALQTY HELPER FUNCTIONS
 function getOrderTotal(products) {
   return products.reduce((total, product) => {
     total += product.price * product.orderProduct.quantity
@@ -11,7 +10,13 @@ function getOrderTotal(products) {
   }, 0)
 }
 
-// on /cart
+function getTotalQty(products) {
+  return products.reduce((total, product) => {
+    total += product.orderProduct.quantity
+    return total
+  }, 0)
+}
+
 //"VIEW CART" FOR LOGGED IN USERS OR GUESTS
 router.get('/', async (req, res, next) => {
   try {
@@ -20,19 +25,12 @@ router.get('/', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
-      // console.log(
-      //   'created?',
-      //   created,
-      //   'order.id',
-      //   userCart.id,
-      //   'how many products',
-      //   userCart.products.length
-      // )
       userCart.orderTotal = getOrderTotal(userCart.products)
+      userCart.totalQty = getTotalQty(userCart.products)
       userCart.save()
       res.json(userCart)
     } else {
@@ -50,7 +48,7 @@ router.delete('/', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const emptied = await userCart.removeProducts(
         await userCart.getProducts()
@@ -60,12 +58,13 @@ router.delete('/', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       //may not be necessary, but recalculating the orderTotal with helper fxn to make sure that functionality of emptying cart is working properly
       emptiedCart.orderTotal = getOrderTotal(emptiedCart.products)
+      emptiedCart.totalQty = getTotalQty(userCart.products)
       emptiedCart.save()
       res.json(emptiedCart)
     } else if (!req.session.cart) {
@@ -87,27 +86,28 @@ router.post('/:productId', async (req, res, next) => {
     const product = await Product.findByPk(req.params.productId)
     if (req.user) {
       const [userCart, created] = await Order.findOrCreate({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const orderProduct = await OrderProduct.findOne({
-        where: {orderId: userCart.id, productId: req.params.productId}
+        where: {orderId: userCart.id, productId: req.params.productId},
       })
       if (!orderProduct) {
         await userCart.addProduct(product)
       } else {
         await orderProduct.update({
-          quantity: orderProduct.quantity + 1
+          quantity: orderProduct.quantity + 1,
         })
       }
       const updatedCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
       res.json(updatedCart)
     } else {
@@ -128,7 +128,7 @@ router.delete('/:productId', async (req, res, next) => {
   try {
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const product = await Product.findByPk(req.params.productId)
       const promise = await userCart.removeProduct(product)
@@ -137,9 +137,9 @@ router.delete('/:productId', async (req, res, next) => {
         where: {userId: req.user.id, isComplete: false},
         include: [
           {
-            model: Product
-          }
-        ]
+            model: Product,
+          },
+        ],
       })
       console.log(
         'this product was removed:',
@@ -148,6 +148,7 @@ router.delete('/:productId', async (req, res, next) => {
         req.user.id
       )
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
       res.json(updatedCart)
     } else {
@@ -161,23 +162,21 @@ router.delete('/:productId', async (req, res, next) => {
   }
 })
 
-//cart/:productid/decrement -- remove one instance of the item
-//if only once instance is in cart, deletes item
+//removes qty of item by 1, or "desroys" assoc if only 1 in cart
 router.put('/:productId/decrement', async (req, res, next) => {
   try {
     if (req.user) {
       //refactor to include aliased table - Noelle to link in team channel
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
+        where: {userId: req.user.id, isComplete: false},
       })
       const orderProduct = await OrderProduct.findOne({
-        where: {orderId: userCart.id, productId: req.params.productId}
+        where: {orderId: userCart.id, productId: req.params.productId},
       })
 
-      // check that the quantity is greater than 1, otherwise detroy the orderProduct association. Do we want this from a UX perspective?
       if (orderProduct.quantity > 1) {
         await orderProduct.update({
-          quantity: orderProduct.quantity - 1
+          quantity: orderProduct.quantity - 1,
         })
       } else {
         orderProduct.destroy() //or use magic method
@@ -185,9 +184,10 @@ router.put('/:productId/decrement', async (req, res, next) => {
 
       const updatedCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false},
-        include: [{model: Product}]
+        include: [{model: Product}],
       })
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
+      updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
       res.json(updatedCart)
     } else if (req.session.cart.items[req.params.productId]) {
@@ -197,55 +197,6 @@ router.put('/:productId/decrement', async (req, res, next) => {
       res.json(cart)
     } else {
       res.send('this item is not in your cart')
-    }
-  } catch (err) {
-    next(err)
-  }
-})
-
-//checking out
-///put or post route?
-router.get('/checkout', async (req, res, next) => {
-  try {
-    if (req.user) {
-      const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product
-          }
-        ]
-      })
-      userCart.isComplete = true
-      userCart.save()
-      res.json(userCart)
-    } else {
-      //this will take the guest cart and make an order
-      const guestOrder = await Order.create({isComplete: true})
-      guestOrder.orderTotal = req.session.cart.totalPrice
-      guestOrder.save()
-      console.log('cart is: ', req.session.cart)
-      const productsIdArray = Object.keys(req.session.cart.items).map(key =>
-        Number(key)
-      )
-      console.log('array of product ids: ', productsIdArray)
-      // console.log('cart: ', req.session.cart)
-      productsIdArray.forEach(async id => {
-        let product = await Product.findByPk(id)
-        let [orderProduct] = await guestOrder.addProduct(
-          product
-          // await Product.findByPk(id)
-        )
-        console.log('cart: ', req.session.cart.items[id])
-          // const stringId = String(id)
-        orderProduct.quantity = req.session.cart.items[`${id}`].qty
-          console.log(orderProduct.quantity)
-        orderProduct.save()
-
-      })
-
-      req.session.cart = new Cart({})
-      res.json(guestOrder)
     }
   } catch (err) {
     next(err)

@@ -17,11 +17,6 @@ module.exports = class Cart {
     storedItem.price = storedItem.item.price * storedItem.qty
     this.totalQty++
     this.totalPrice += storedItem.item.price
-    // let sum = 0
-    // this.items.forEach(item => {
-    //   sum += item.price * item.quantity
-    // })
-    // return sum
   }
 
   removeItem(id) {
