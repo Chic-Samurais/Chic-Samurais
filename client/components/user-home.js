@@ -15,6 +15,7 @@ export const UserHome = (props) => {
     <div>
       <h3>Welcome, {email}</h3>
       <Link to="/admin/products">Edit Products</Link>
+      <br />
       <Link to="/admin/users">View Users</Link>
     </div>
     ) : (
