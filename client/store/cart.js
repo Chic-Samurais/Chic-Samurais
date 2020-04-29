@@ -1,6 +1,4 @@
 import axios from 'axios'
-import history from '../history'
-import {func} from 'prop-types'
 
 //ACTION CREATORS
 const GET_CURRENT_ORDER = 'GET_CURRENT_ORDER'
