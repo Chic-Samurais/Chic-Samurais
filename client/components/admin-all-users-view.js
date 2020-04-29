@@ -29,7 +29,7 @@ export class AllUsers extends React.Component {
 }
 
 const mapState = state => {
-  return {users: state.adminUser.users}
+  return {users: state.adminUser.allUsers}
 }
 
 const mapDispatch = dispatch => ({
