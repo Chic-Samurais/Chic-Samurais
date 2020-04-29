@@ -32,7 +32,16 @@ router.get('/', async (req, res, next) => {
       userCart.orderTotal = getOrderTotal(userCart.products)
       userCart.totalQty = getTotalQty(userCart.products)
       userCart.save()
-      res.json(userCart)
+      const updatedCart = await Order.findOne({
+        where: {userId: req.user.id, isComplete: false},
+        include: [
+          {
+            model: Product
+          }
+        ]
+      })
+      console.log(updatedCart)
+      res.json(updatedCart)
     } else {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
       req.session.cart = cart
@@ -109,6 +118,7 @@ router.put('/:productId', async (req, res, next) => {
       updatedCart.orderTotal = getOrderTotal(updatedCart.products)
       updatedCart.totalQty = getTotalQty(updatedCart.products)
       updatedCart.save()
+      console.log(updatedCart)
       res.json(updatedCart)
     } else {
       //guest - for this do a method to extrapolate product data and push to items array

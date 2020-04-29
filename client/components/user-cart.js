@@ -6,7 +6,7 @@ import {
   increaseQuant,
   decreaseQuant,
   deleteProd
-} from '../store/cart'
+} from '../store/userCart'
 
 export class Cart extends React.Component {
   constructor(props) {
@@ -19,12 +19,11 @@ export class Cart extends React.Component {
   }
 
   render() {
-    const userCartProducts = this.props.userCart.products || []
+    const cart = this.props.cart || []
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {console.log('THIS IS STATE', this.props.userCart)}
-        {userCartProducts.map(product => (
+        {cart.map(product => (
           <div key={product.id}>
             <img
               src={product.imageUrl}
