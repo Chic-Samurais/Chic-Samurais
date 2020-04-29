@@ -36,13 +36,15 @@ export const UserHome = props => {
           </h4>
           <hr />
           <h3 className="siteHeader">🖼 Previously Procured Pieces 🖼</h3>
+          <br />
           {props.orders.map(order => (
             <div key={order.id}>
-              <h4>
-                Date: {order.updatedAt.toLocaleString().slice(0, 10)} | Name:
+              <h5>
+                Date:
+                {order.updatedAt.toLocaleString().slice(0, 10)} | Name:
                 {order.name} | Order Address: {order.address} | Amount:
                 {order.orderTotal} | Items: {order.totalQty}
-              </h4>
+              </h5>
               <hr />
             </div>
           ))}

@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
 const Order = require('../db/models/order')
+const Product = require('../db/models/order')
+
 module.exports = router
 
 router.post('/login', async (req, res, next) => {
@@ -41,7 +43,9 @@ router.post('/logout', (req, res) => {
 
 //changed from boilermaker a bit
 router.get('/me', async (req, res) => {
-  const user = await User.findByPk(req.user.id, {include: [{model: Order}]})
+  const user = await User.findByPk(req.user.id, {
+    include: [{model: Order}]
+  })
   console.log(req.user)
   res.json(user)
 })
