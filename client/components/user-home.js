@@ -6,25 +6,24 @@ import {Link} from 'react-router-dom'
 /**
  * COMPONENT
  */
-export const UserHome = (props) => {
+export const UserHome = props => {
   const {email, isAdmin} = props
 
   return (
     <div>
-    {isAdmin ? (
-    <div>
-      <h3>Welcome, {email}</h3>
-      <Link to="/admin/products">Edit Products</Link>
-      <br />
-      <Link to="/admin/users">View Users</Link>
+      {isAdmin ? (
+        <div>
+          <h3>Welcome, {email}</h3>
+          <Link to="/admin/products">Edit Products</Link>
+          <br />
+          <Link to="/admin/users">View Users</Link>
+        </div>
+      ) : (
+        <div>
+          <h3>Welcome, {email}</h3>
+        </div>
+      )}
     </div>
-    ) : (
-      <div>
-      <h3>Welcome, {email}</h3>
-    </div>
-    )
-  }
-  </div>
   )
 }
 

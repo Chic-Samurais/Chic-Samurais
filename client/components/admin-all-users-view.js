@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchProducts} from '../store/product'
+import {fetchAllUsers} from '../store/adminUser'
 import {Link} from 'react-router-dom'
 
 export class AllUsers extends React.Component {
@@ -9,25 +9,18 @@ export class AllUsers extends React.Component {
     this.state = {}
   }
   componentDidMount() {
-    this.props.fetchProducts()
+    this.props.fetchAllUsers()
   }
   render() {
-    const products = this.props.products || []
+    console.log('this.props: ', this.props)
+    const users = this.props.users || []
+    console.log('this.props: ', this.props)
     return (
       <div id="allProducts">
-        {products.map(product => (
-          <div key={product.id} className="allProductMapped">
-            <Link to={`products/${product.id}`}>
-              <img
-                src={product.imageUrl}
-                className="allProductImg"
-                height="250px"
-                width=""
-              />
-              <h3>{product.title}</h3>
-              <h4>{product.artist}</h4>
-              <p>${product.price / 100}</p>
-            </Link>
+        {users.map(user => (
+          <div key={user.id} className="allProductMapped">
+            <h3>User ID: {user.id}</h3>
+            <h4>Email: {user.email}</h4>
           </div>
         ))}
       </div>
@@ -36,10 +29,10 @@ export class AllUsers extends React.Component {
 }
 
 const mapState = state => {
-  return {users: state.user.defaultUser}
+  return {users: state.adminUser.users}
 }
 
 const mapDispatch = dispatch => ({
-  fetchProducts: () => dispatch(fetchProducts())
+  fetchAllUsers: () => dispatch(fetchAllUsers())
 })
 export default connect(mapState, mapDispatch)(AllUsers)
