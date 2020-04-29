@@ -8,11 +8,6 @@ router.put('/', async (req, res, next) => {
     if (req.user) {
       const userCart = await Order.findOne({
         where: {userId: req.user.id, isComplete: false}
-        // include: [
-        //   {
-        //     model: Product,
-        //   },
-        // ],
       })
       if (userCart.totalQty) {
         await userCart.update({

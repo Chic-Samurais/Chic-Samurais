@@ -69,10 +69,10 @@ export class GuestCart extends React.Component {
             : 0}
           .00
         </h3>
-        {this.props.userCart.totalQty ? (
+        {this.props.guestCart.totalQty ? (
           <h3>
             Total Items:
-            {this.props.userCart.totalQty}
+            {this.props.guestCart.totalQty}
           </h3>
         ) : (
           <h3>
@@ -81,7 +81,7 @@ export class GuestCart extends React.Component {
         )}
 
         <hr />
-        <h3>Complete Your Order!</h3>
+
         <GuestCheckoutForm />
       </div>
     )

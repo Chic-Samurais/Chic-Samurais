@@ -63,8 +63,8 @@ export class UserCheckoutForm extends React.Component {
         <br />
         <sup>
           <i>
-            *An oeuvre is the very fancy French way of referring to a piece of
-            art. Just some light pretention to go with your new possession(s)!
+            *An "oeuvre" is the very fancy French word for a piece of art. Just
+            some light pretention to go with your new possession(s)!
           </i>
         </sup>
       </div>

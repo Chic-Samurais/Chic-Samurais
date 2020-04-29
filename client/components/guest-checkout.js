@@ -33,6 +33,7 @@ export class UserCheckoutForm extends React.Component {
     }
     return (
       <div id="checkout">
+        <h3>Complete Your Order!</h3>
         <form
           onSubmit={() => {
             this.handleSubmit(event)
@@ -58,13 +59,13 @@ export class UserCheckoutForm extends React.Component {
           />
           <br />
           <br />
-          <button type="submit">Order that Ouevres</button>
+          <button type="submit">Order that Ouevre</button>
         </form>
         <br />
         <sup>
           <i>
-            *An oeuvre is the very fancy French way of referring to a piece of
-            art. Just some light pretention to go with your new possession(s)!
+            *An "oeuvre" is the very fancy French word for a piece of art. Just
+            some light pretention to go with your new possession(s)!
           </i>
         </sup>
       </div>

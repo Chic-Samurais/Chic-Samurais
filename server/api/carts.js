@@ -29,18 +29,10 @@ router.get('/', async (req, res, next) => {
           }
         ]
       })
+      console.log(userCart)
       userCart.orderTotal = getOrderTotal(userCart.products)
       userCart.totalQty = getTotalQty(userCart.products)
-      userCart.save()
-      const updatedCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product
-          }
-        ]
-      })
-      console.log(updatedCart)
+      const updatedCart = await userCart.save()
       res.json(updatedCart)
     } else {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
