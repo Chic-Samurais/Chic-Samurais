@@ -19,40 +19,39 @@ export class GuestCart extends React.Component {
   }
 
   render() {
-    console.log('>>>>>>>>>this.props.cart: ', this.props.guestCart)
-    const guestCartItems = this.props.guestCart || []
-    console.log(">>>>>>>>>guestCartItems: ", guestCartItems);
+    // console.log('>>>>>>props: ', this.props);
+    const cart = this.props.cart || []
+    // console.log('>>>>>>>>>this.props.cart: ', this.props.cart)
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {Object.values(guestCartItems).map(item => (
-          <div key={item.id}>
-            {console.log(item.id)}
+        {cart.map(product => (
+          <div key={product.item.id}>
             <img
-              src={item.imageUrl}
+              src={product.item.imageUrl}
               height="100px"
               width=""
               className="prodThumb"
             />
-            <h3>{item.title}</h3>
-            <p>Subtotal: ${item.price / 100}</p>
-            <p>Qty: {item.qty}</p>
+            <h3>{product.item.title}</h3>
+            <p>Price: ${product.price / 100}</p>
+            <p>Qty: {product.qty}</p>
             <button
               type="button"
-              onClick={() => this.props.increaseQuant(item)}
+              onClick={() => this.props.increaseQuant(product)}
             >
               +
             </button>
             <button
               type="button"
-              onClick={() => this.props.decreaseQuant(item)}
+              onClick={() => this.props.decreaseQuant(product)}
             >
               -
             </button>
             <button
               type="button"
               onClick={() => {
-                this.props.deleteProd(item)
+                this.props.deleteProd(product)
                 // .setState(this.props.fetchCurrentOrder())
               }}
             >
@@ -60,6 +59,7 @@ export class GuestCart extends React.Component {
             </button>
           </div>
         ))}
+        <div />
       </div>
     )
   }
@@ -67,7 +67,7 @@ export class GuestCart extends React.Component {
 
 //Insert name and address form for checkout
 const mapState = state => {
-  return {cart: state.guestCart.guestCart}
+  return {cart: state.guestCart.cart}
 }
 
 const mapDispatch = dispatch => ({
