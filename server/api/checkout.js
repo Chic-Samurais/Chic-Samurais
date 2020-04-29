@@ -2,22 +2,29 @@ const router = require('express').Router()
 const {Order, Product, Cart} = require('../db/models')
 module.exports = router
 
-router.post('/', async (req, res, next) => {
+router.put('/', async (req, res, next) => {
   try {
+    console.log(req.body)
     if (req.user) {
       const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product,
-          },
-        ],
+        where: {userId: req.user.id, isComplete: false}
       })
-
       if (userCart.totalQty) {
-        userCart.isComplete = true
-        userCart.save()
-        res.json(userCart)
+        await userCart.update({
+          isComplete: true,
+          name: req.body.name,
+          address: req.body.address
+        })
+        const finalCart = await Order.findOne({
+          where: {id: userCart.id, isComplete: true},
+          include: [
+            {
+              model: Product
+            }
+          ]
+        })
+        console.log(finalCart)
+        res.json(finalCart)
       } else {
         res.send(
           'Your cart is empty! Add items to your cart before checking out!'
@@ -34,6 +41,8 @@ router.post('/', async (req, res, next) => {
         isComplete: true,
         orderTotal: req.session.cart.totalPrice, //update to match guest cart?
         totalQty: req.session.cart.totalQty,
+        name: req.body.name,
+        address: req.body.address
       })
 
       // refactor with "generateArray method on cart? Is that a better big O?"
@@ -57,7 +66,7 @@ router.post('/', async (req, res, next) => {
       }
 
       const dbGuestOrder = await Order.findByPk(guestOrder.id, {
-        include: [{model: Product}],
+        include: [{model: Product}]
       })
       //REDIRECT OR MESSAGE HERE?
 
