@@ -7,8 +7,8 @@ import {Link} from 'react-router-dom'
  * COMPONENT
  */
 export const UserHome = props => {
-  console.log(props)
   const {email, isAdmin} = props
+  const orders = props.orders || []
   return (
     <div>
       {isAdmin ? (
@@ -37,7 +37,7 @@ export const UserHome = props => {
           <hr />
           <h3 className="siteHeader">🖼 Previously Procured Pieces 🖼</h3>
           <br />
-          {props.orders.map(order => (
+          {orders.map(order => (
             <div key={order.id}>
               <h5>
                 Date:
