@@ -19,13 +19,10 @@ export class GuestCart extends React.Component {
   }
 
   render() {
-    console.log('>>>>>>>>>this.props.guestCart: ', this.props.guestCart)
-    console.log('>>>>>>>>>guestCartItems: ', this.props.guestCart)
     const guestCartItems = this.props.guestCart.items || {}
-    console.log('>>>>>>>>>guestCartItems: ', guestCartItems)
     return (
       <div id="cart">
-        <h2>Prospective Posters for Purchase</h2>
+        <h2>Prospective Posters for Purchase 🙌</h2>
         {Object.values(guestCartItems).map(product => (
           <div key={product.item.id}>
             <img
@@ -65,7 +62,18 @@ export class GuestCart extends React.Component {
             : 0}
           .00
         </h3>
-        <h4>Total Items: {this.props.guestCart.totalQty}</h4>
+        <h3>
+          Total Items:{' '}
+          {this.props.guestCart.totalQty ? (
+            this.props.guestCart.totalQty
+          ) : (
+            <h5>
+              Your cart is empty! Pick out some posters before peacin', please
+              🙏
+            </h5>
+          )}
+        </h3>
+
         <hr />
         <h3>Complete Your Order!</h3>
         <GuestCheckoutForm />

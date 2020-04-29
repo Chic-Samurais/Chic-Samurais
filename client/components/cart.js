@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+
 import {
   fetchCurrentOrder,
   increaseQuant,
@@ -23,7 +23,7 @@ export class Cart extends React.Component {
     const userCartProducts = this.props.userCart.products || []
     return (
       <div id="cart">
-        <h2>Prospective Posters for Purchase</h2>
+        <h2>Prospective Posters for Purchase 🙌</h2>
         {userCartProducts.map(product => (
           <div key={product.id}>
             <img
@@ -62,10 +62,17 @@ export class Cart extends React.Component {
           {this.props.userCart.orderTotal ? this.props.userCart.orderTotal : 0}
           .00
         </h3>
-        <h4>
+        <h3>
           Total Items:{' '}
-          {this.props.userCart.totalQty ? this.props.userCart.totalQty : 0}
-        </h4>
+          {this.props.userCart.totalQty ? (
+            this.props.userCart.totalQty
+          ) : (
+            <h5>
+              Your cart is empty! Pick out some posters before peacin', please
+              🙏
+            </h5>
+          )}
+        </h3>
         <hr />
         <UserCheckoutForm />
       </div>
