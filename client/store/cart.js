@@ -10,9 +10,9 @@ const DELETE_ITEM = 'DELETE_ITEM'
 const CHECKOUT = 'CHECKOUT'
 
 //ACTION TYPES
-const getCurrentOrder = products => ({
+const getCurrentOrder = cart => ({
   type: GET_CURRENT_ORDER,
-  products
+  cart
 })
 const decreaseQty = products => ({
   type: DECREASE_QTY,
@@ -35,7 +35,7 @@ const checkout = userId => ({
 //INITIAL STATE
 
 const initialState = {
-  cart: [],
+  cart: {}
 }
 
 //THUNKS
@@ -43,8 +43,7 @@ const initialState = {
 export const fetchCurrentOrder = () => async dispatch => {
   try {
     const {data} = await axios.get(`/api/cart`)
-    dispatch(getCurrentOrder(data.products))
-    console.log('>>>>>>>data: ', data)
+    dispatch(getCurrentOrder(data))
   } catch (err) {
     console.error(err)
   }
@@ -90,7 +89,9 @@ export const checkoutCart = () => async dispatch => {
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case GET_CURRENT_ORDER:
-      return {...state, cart: action.products}
+      console.log(('thunk cart', action.cart))
+      console.log(state)
+      return {...state, cart: action.cart}
 
     case INCREASE_QTY:
       return {...state, cart: action.products}

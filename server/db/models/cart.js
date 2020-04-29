@@ -23,6 +23,7 @@ module.exports = class Cart {
     this.totalQty -= this.items[id].qty
     this.totalPrice -= this.items[id].price
     delete this.items[id] //do we want to use delete here?
+    return this
   }
 
   minusOne(id) {
