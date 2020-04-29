@@ -35,7 +35,7 @@ export const UserHome = props => {
             </i>
           </h4>
           <br />
-          <h3>🖼 Previously Procured Posters 🖼</h3>
+          <h3>🖼 Previously Procured Pieces 🖼</h3>
         </div>
       )}
     </div>
