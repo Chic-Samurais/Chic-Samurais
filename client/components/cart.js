@@ -23,7 +23,6 @@ export class Cart extends React.Component {
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {console.log('THIS IS STATE', this.props.userCart)}
         {userCartProducts.map(product => (
           <div key={product.id}>
             <img
@@ -33,7 +32,7 @@ export class Cart extends React.Component {
               className="prodThumb"
             />
             <h3>{product.title}</h3>
-            <p>Price: ${product.price / 100}</p>
+            <p>Price: ${product.price / 100}.00</p>
             <p>Qty: {product.orderProduct.quantity}</p>
             <button
               type="button"
@@ -53,10 +52,12 @@ export class Cart extends React.Component {
                 this.props.deleteProd(product)
               }}
             >
-              Remove
+              Remove Item
             </button>
           </div>
         ))}
+        <h3>Order Total: ${this.props.userCart.orderTotal}.00</h3>
+        <h4>Total Items: {this.props.userCart.totalQty}</h4>
       </div>
     )
   }

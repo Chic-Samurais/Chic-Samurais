@@ -20,7 +20,7 @@ export class GuestCart extends React.Component {
 
   render() {
     console.log('>>>>>>>>>this.props.guestCart: ', this.props.guestCart)
-
+    console.log('>>>>>>>>>guestCartItems: ', this.props.guestCart)
     const guestCartItems = this.props.guestCart.items || {}
     console.log('>>>>>>>>>guestCartItems: ', guestCartItems)
     return (
@@ -28,7 +28,6 @@ export class GuestCart extends React.Component {
         <h2>Welcome to your cart</h2>
         {Object.values(guestCartItems).map(product => (
           <div key={product.item.id}>
-            {console.log(product.item.id)}
             <img
               src={product.item.imageUrl}
               height="100px"
@@ -36,7 +35,6 @@ export class GuestCart extends React.Component {
               className="prodThumb"
             />
             <h3>{product.item.title}</h3>
-            <p>Subtotal: ${product.item.price / 100}</p>
             <p>Qty: {product.qty}</p>
             <button
               type="button"
@@ -56,10 +54,12 @@ export class GuestCart extends React.Component {
                 this.props.deleteProd(product)
               }}
             >
-              Remove
+              Remove Item
             </button>
           </div>
         ))}
+        <h3>Order Total: ${this.props.guestCart.totalPrice / 100}.00</h3>
+        <h4>Total Items: {this.props.guestCart.totalQty}</h4>
       </div>
     )
   }

@@ -68,7 +68,7 @@ export const decreaseQuant = product => async dispatch => {
 }
 export const deleteProd = product => async dispatch => {
   try {
-    const {data} = axios.delete(`/api/cart/${product.item.id}`)
+    const {data} = await axios.delete(`/api/cart/${product.item.id}`)
     dispatch(deleteItem(data))
   } catch (err) {
     console.error(err)

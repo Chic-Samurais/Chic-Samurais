@@ -52,43 +52,6 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-//EMPTY ENTIRE CART FOR LOGGED IN USERS AND GUESTS
-router.delete('/', async (req, res, next) => {
-  try {
-    if (req.user) {
-      const userCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false}
-      })
-      const emptied = await userCart.removeProducts(
-        await userCart.getProducts()
-      )
-      console.log('number of products removed is: ', emptied)
-      const emptiedCart = await Order.findOne({
-        where: {userId: req.user.id, isComplete: false},
-        include: [
-          {
-            model: Product
-          }
-        ]
-      })
-      //may not be necessary, but recalculating the orderTotal with helper fxn to make sure that functionality of emptying cart is working properly
-      emptiedCart.orderTotal = getOrderTotal(emptiedCart.products)
-      emptiedCart.totalQty = getTotalQty(userCart.products)
-      emptiedCart.save()
-      res.json(emptiedCart)
-    } else if (!req.session.cart) {
-      res.send('Your cart is empty')
-    } else {
-      const cart = new Cart(req.session.cart ? req.session.cart : {})
-      cart.clearCart()
-      req.session.cart = cart
-      res.json(req.session.cart)
-    }
-  } catch (error) {
-    next(error)
-  }
-})
-
 //ADDING/POSTING A NEW, UNIQUE ITEM TO A CART Or increments existing item
 router.put('/:productId', async (req, res, next) => {
   try {
@@ -165,7 +128,8 @@ router.delete('/:productId', async (req, res, next) => {
       const cart = new Cart(req.session.cart ? req.session.cart : {})
       cart.removeItem(req.params.productId)
       req.session.cart = cart
-      res.json(cart)
+      console.log(Object.values(req.session.cart.items))
+      res.json(req.session.cart)
     }
   } catch (error) {
     next(error)
