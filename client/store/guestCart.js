@@ -27,9 +27,9 @@ const deleteItem = cart => ({
   type: DELETE_ITEM,
   cart
 })
-const checkout = sessionId => ({
+const checkout = cart => ({
   type: CHECKOUT,
-  sessionId
+  cart
 })
 
 //INITIAL STATE
@@ -74,9 +74,9 @@ export const deleteProd = product => async dispatch => {
     console.error(err)
   }
 }
-export const checkoutCart = () => async dispatch => {
+export const checkoutCart = shippingInfo => async dispatch => {
   try {
-    const {data} = await axios.put(`/api/cart/checkout`)
+    const {data} = await axios.put(`/api/cart/checkout`, shippingInfo)
     dispatch(checkout(data))
   } catch (err) {
     console.error(err)
@@ -101,7 +101,7 @@ export default function cartReducer(state = initialState, action) {
       return {...state, cart: action.cart}
     case CHECKOUT:
       console.log(state)
-      return {...state}
+      return {...state, cart: action.cart}
     // where orders.userId = action.userId > order.isComplete = true
     //  (cart.id === action.id ) {
     //     return cart.isComplete = true

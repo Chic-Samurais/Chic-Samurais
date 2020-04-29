@@ -1,12 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {
   fetchCurrentOrder,
   increaseQuant,
   decreaseQuant,
   deleteProd
 } from '../store/guestCart'
+import GuestCheckoutForm from './guest-checkout'
 
 export class GuestCart extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ export class GuestCart extends React.Component {
     console.log('>>>>>>>>>guestCartItems: ', guestCartItems)
     return (
       <div id="cart">
-        <h2>Welcome to your cart</h2>
+        <h2>Prospective Posters for Purchase</h2>
         {Object.values(guestCartItems).map(product => (
           <div key={product.item.id}>
             <img
@@ -58,8 +58,17 @@ export class GuestCart extends React.Component {
             </button>
           </div>
         ))}
-        <h3>Order Total: ${this.props.guestCart.totalPrice / 100}.00</h3>
+        <h3>
+          Order Total: $
+          {this.props.guestCart.totalPrice
+            ? this.props.guestCart.totalPrice / 100
+            : 0}
+          .00
+        </h3>
         <h4>Total Items: {this.props.guestCart.totalQty}</h4>
+        <hr />
+        <h3>Complete Your Order!</h3>
+        <GuestCheckoutForm />
       </div>
     )
   }

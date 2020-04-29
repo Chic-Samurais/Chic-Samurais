@@ -7,6 +7,7 @@ import {
   decreaseQuant,
   deleteProd
 } from '../store/cart'
+import UserCheckoutForm from './user-checkout'
 
 export class Cart extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export class Cart extends React.Component {
     const userCartProducts = this.props.userCart.products || []
     return (
       <div id="cart">
-        <h2>Welcome to your cart</h2>
+        <h2>Prospective Posters for Purchase</h2>
         {userCartProducts.map(product => (
           <div key={product.id}>
             <img
@@ -56,8 +57,17 @@ export class Cart extends React.Component {
             </button>
           </div>
         ))}
-        <h3>Order Total: ${this.props.userCart.orderTotal}.00</h3>
-        <h4>Total Items: {this.props.userCart.totalQty}</h4>
+        <h3>
+          Order Total: $
+          {this.props.userCart.orderTotal ? this.props.userCart.orderTotal : 0}
+          .00
+        </h3>
+        <h4>
+          Total Items:{' '}
+          {this.props.userCart.totalQty ? this.props.userCart.totalQty : 0}
+        </h4>
+        <hr />
+        <UserCheckoutForm />
       </div>
     )
   }
