@@ -34,8 +34,9 @@ export const UserHome = props => {
               inventory . . .
             </i>
           </h4>
-          <br />
+          <hr />
           <h3>🖼 Previously Procured Pieces 🖼</h3>
+          <div>{console.log(props)}</div>
         </div>
       )}
     </div>
@@ -48,7 +49,8 @@ export const UserHome = props => {
 const mapState = state => {
   return {
     email: state.user.email,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    orders: state.user.orders
   }
 }
 

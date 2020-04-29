@@ -58,8 +58,15 @@ export class UserCheckoutForm extends React.Component {
           />
           <br />
           <br />
-          <button type="submit">Complete Order</button>
+          <button type="submit">Order that Oeuvre</button>
         </form>
+        <sup>
+          <i>
+            *An oeuvre is the very fancy French way of referring to a piece of
+            art. Just some light pretention to go with your new possession(s)!
+            ;)
+          </i>
+        </sup>
       </div>
     )
   }
