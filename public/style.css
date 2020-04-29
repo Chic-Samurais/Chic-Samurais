@@ -1,5 +1,7 @@
 body {
-  font-family: serif;
+  font-family: sans-serif;
+  background-color: dimgrey;
+  margin: 0;
 }
 
 a {
@@ -28,6 +30,14 @@ form div {
   text-align: center;
 }
 
-/* .hrOrderHist {
-  color:
-} */
+#main {
+  width: 900px;
+  margin: 0 auto;
+  height: 100%;
+  border: darkslategrey 3px solid;
+  background-color: white;
+  padding: 10px 30px;
+}
+h1 {
+  font-family: fantasy;
+}
