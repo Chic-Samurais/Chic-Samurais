@@ -14,22 +14,22 @@ const getCurrentOrder = cart => ({
   type: GET_CURRENT_ORDER,
   cart
 })
-const decreaseQty = cart => ({
+const decreaseQty = products => ({
   type: DECREASE_QTY,
-  cart
+  products
 })
 
-const increaseQty = cart => ({
+const increaseQty = products => ({
   type: INCREASE_QTY,
-  cart
+  products
 })
-const deleteItem = cart => ({
+const deleteItem = products => ({
   type: DELETE_ITEM,
-  cart
+  products
 })
-const checkout = sessionId => ({
+const checkout = userId => ({
   type: CHECKOUT,
-  sessionId
+  userId
 })
 
 //INITIAL STATE
@@ -44,32 +44,33 @@ export const fetchCurrentOrder = () => async dispatch => {
   try {
     const {data} = await axios.get(`/api/cart`)
     dispatch(getCurrentOrder(data))
-    console.log('>>>>>>>data:', data)
   } catch (err) {
     console.error(err)
   }
 }
 export const increaseQuant = product => async dispatch => {
+  const productId = product.id
   try {
-    const {data} = await axios.put(`/api/cart/${product.item.id}`)
-    dispatch(increaseQty(data))
-    console.log('>>>>>>>data: ', data)
+    const {data} = await axios.put(`/api/cart/${productId}`)
+    dispatch(increaseQty(data.products))
   } catch (err) {
     console.error(err)
   }
 }
 export const decreaseQuant = product => async dispatch => {
+  const productId = product.id
   try {
-    const {data} = await axios.put(`/api/cart/${product.item.id}/decrement`)
-    dispatch(decreaseQty(data))
+    const {data} = await axios.put(`/api/cart/${productId}/decrement`)
+    dispatch(decreaseQty(data.products))
   } catch (err) {
     console.error(err)
   }
 }
 export const deleteProd = product => async dispatch => {
   try {
-    const {data} = await axios.delete(`/api/cart/${product.item.id}`)
-    dispatch(deleteItem(data))
+    const productId = product.id
+    const {data} = await axios.delete(`/api/cart/${productId}`)
+    dispatch(deleteItem(data.products))
   } catch (err) {
     console.error(err)
   }
@@ -88,17 +89,18 @@ export const checkoutCart = () => async dispatch => {
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case GET_CURRENT_ORDER:
+      console.log(('thunk cart', action.cart))
       console.log(state)
       return {...state, cart: action.cart}
 
     case INCREASE_QTY:
-      return {...state, cart: action.cart}
+      return {...state, cart: action.products}
 
     case DECREASE_QTY:
-      return {...state, cart: action.cart}
+      return {...state, cart: action.products}
 
     case DELETE_ITEM:
-      return {...state, cart: action.cart}
+      return {...state, cart: action.products}
     case CHECKOUT:
       console.log(state)
       return {...state}

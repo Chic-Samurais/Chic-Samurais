@@ -6,9 +6,9 @@ import {
   increaseQuant,
   decreaseQuant,
   deleteProd
-} from '../store/guestCart'
+} from '../store/userCart'
 
-export class GuestCart extends React.Component {
+export class Cart extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -19,23 +19,21 @@ export class GuestCart extends React.Component {
   }
 
   render() {
-    console.log('>>>>>>>>>this.props.guestCart: ', this.props.guestCart)
-    console.log('>>>>>>>>>guestCartItems: ', this.props.guestCart)
-    const guestCartItems = this.props.guestCart.items || {}
-    console.log('>>>>>>>>>guestCartItems: ', guestCartItems)
+    const cart = this.props.cart || []
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {Object.values(guestCartItems).map(product => (
-          <div key={product.item.id}>
+        {cart.map(product => (
+          <div key={product.id}>
             <img
-              src={product.item.imageUrl}
+              src={product.imageUrl}
               height="100px"
               width=""
               className="prodThumb"
             />
-            <h3>{product.item.title}</h3>
-            <p>Qty: {product.qty}</p>
+            <h3>{product.title}</h3>
+            <p>Price: ${product.price / 100}</p>
+            <p>Qty: {product.orderProduct.quantity}</p>
             <button
               type="button"
               onClick={() => this.props.increaseQuant(product)}
@@ -54,12 +52,10 @@ export class GuestCart extends React.Component {
                 this.props.deleteProd(product)
               }}
             >
-              Remove Item
+              Remove
             </button>
           </div>
         ))}
-        <h3>Order Total: ${this.props.guestCart.totalPrice / 100}.00</h3>
-        <h4>Total Items: {this.props.guestCart.totalQty}</h4>
       </div>
     )
   }
@@ -67,13 +63,13 @@ export class GuestCart extends React.Component {
 
 //Insert name and address form for checkout
 const mapState = state => {
-  return {guestCart: state.guestCart.cart}
+  return {userCart: state.userCart.cart}
 }
 
 const mapDispatch = dispatch => ({
   fetchCurrentOrder: () => dispatch(fetchCurrentOrder()),
   increaseQuant: product => dispatch(increaseQuant(product)),
   decreaseQuant: product => dispatch(decreaseQuant(product)),
-  deleteProd: productId => dispatch(deleteProd(productId))
+  deleteProd: product => dispatch(deleteProd(product))
 })
-export default connect(mapState, mapDispatch)(GuestCart)
+export default connect(mapState, mapDispatch)(Cart)

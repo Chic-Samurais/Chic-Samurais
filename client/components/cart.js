@@ -19,11 +19,11 @@ export class Cart extends React.Component {
   }
 
   render() {
-    const cart = this.props.cart || []
+    const userCartProducts = this.props.userCart.products || []
     return (
       <div id="cart">
         <h2>Welcome to your cart</h2>
-        {cart.map(product => (
+        {userCartProducts.map(product => (
           <div key={product.id}>
             <img
               src={product.imageUrl}
@@ -32,7 +32,7 @@ export class Cart extends React.Component {
               className="prodThumb"
             />
             <h3>{product.title}</h3>
-            <p>Price: ${product.price / 100}</p>
+            <p>Price: ${product.price / 100}.00</p>
             <p>Qty: {product.orderProduct.quantity}</p>
             <button
               type="button"
@@ -52,10 +52,12 @@ export class Cart extends React.Component {
                 this.props.deleteProd(product)
               }}
             >
-              Remove
+              Remove Item
             </button>
           </div>
         ))}
+        <h3>Order Total: ${this.props.userCart.orderTotal}.00</h3>
+        <h4>Total Items: {this.props.userCart.totalQty}</h4>
       </div>
     )
   }
@@ -63,7 +65,7 @@ export class Cart extends React.Component {
 
 //Insert name and address form for checkout
 const mapState = state => {
-  return {cart: state.cart.cart}
+  return {userCart: state.userCart.cart}
 }
 
 const mapDispatch = dispatch => ({
