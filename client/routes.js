@@ -9,7 +9,7 @@ import SingleProduct from './components/single-product'
 import Cart from './components/cart'
 import AdminProducts from './components/admin-product-view'
 import AdminSingleProduct from './components/admin-single-product-view'
-import AdminUsers from './components/admin-all-users-view'
+import AllUsers from './components/admin-all-users-view'
 import GuestCart from './components/guest-cart'
 
 /**
@@ -48,7 +48,7 @@ class Routes extends Component {
             <Route
               exact
               path="/admin/users"
-              render={routeProps => <AdminUsers {...routeProps} />}
+              render={routeProps => <AllUsers {...routeProps} />}
             />
             <Route
               exact
