@@ -26,8 +26,8 @@ export class UserCheckoutForm extends React.Component {
     if (this.props.cart.isComplete) {
       return (
         <h3>
-          Thank you! Your order is being processed and your walls will look
-          beautiful in no time!
+          Thank you! Your order has been submitted and your walls will be
+          decorated extraordinarily, momentarily...
         </h3>
       )
     }
@@ -60,11 +60,11 @@ export class UserCheckoutForm extends React.Component {
           <br />
           <button type="submit">Order that Ouevres</button>
         </form>
+        <br />
         <sup>
           <i>
             *An oeuvre is the very fancy French way of referring to a piece of
             art. Just some light pretention to go with your new possession(s)!
-            ;)
           </i>
         </sup>
       </div>

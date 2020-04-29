@@ -22,7 +22,11 @@ export class GuestCart extends React.Component {
     const guestCartItems = this.props.guestCart.items || {}
     return (
       <div id="cart">
-        <h2>Prospective Posters for Purchase 🙌</h2>
+        {this.props.guestCart.isComplete ? (
+          <h2> 🖼Purchased Posters 🖼</h2>
+        ) : (
+          <h2> 🖼 Prospective Posters for Purchase 🖼</h2>
+        )}
         {Object.values(guestCartItems).map(product => (
           <div key={product.item.id}>
             <img
@@ -53,6 +57,9 @@ export class GuestCart extends React.Component {
             >
               Remove Item
             </button>
+            <br />
+            <br />
+            <br />
           </div>
         ))}
         <h3>
@@ -62,17 +69,16 @@ export class GuestCart extends React.Component {
             : 0}
           .00
         </h3>
-        <h3>
-          Total Items:{' '}
-          {this.props.guestCart.totalQty ? (
-            this.props.guestCart.totalQty
-          ) : (
-            <h5>
-              Your cart is empty! Pick out some posters before peacin', please
-              🙏
-            </h5>
-          )}
-        </h3>
+        {this.props.userCart.totalQty ? (
+          <h3>
+            Total Items:
+            {this.props.userCart.totalQty}
+          </h3>
+        ) : (
+          <h3>
+            Your cart is empty! Pick out some posters before peacin', please 🙏
+          </h3>
+        )}
 
         <hr />
         <h3>Complete Your Order!</h3>

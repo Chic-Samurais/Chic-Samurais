@@ -7,8 +7,8 @@ import {Link} from 'react-router-dom'
  * COMPONENT
  */
 export const UserHome = props => {
+  console.log(props)
   const {email, isAdmin} = props
-
   return (
     <div>
       {isAdmin ? (
@@ -35,14 +35,22 @@ export const UserHome = props => {
             </i>
           </h4>
           <hr />
-          <h3>🖼 Previously Procured Pieces 🖼</h3>
-          <div>{console.log(props)}</div>
+          <h3 className="siteHeader">🖼 Previously Procured Pieces 🖼</h3>
+          {props.orders.map(order => (
+            <div key={order.id}>
+              <h4>
+                Date: {order.updatedAt.toLocaleString().slice(0, 10)} | Name:
+                {order.name} | Order Address: {order.address} | Amount:
+                {order.orderTotal} | Items: {order.totalQty}
+              </h4>
+              <hr />
+            </div>
+          ))}
         </div>
       )}
     </div>
   )
 }
-
 /**
  * CONTAINER
  */
